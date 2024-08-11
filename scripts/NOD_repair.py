@@ -19,8 +19,8 @@ import sample_tests
 from pathlib import Path
 
 
-run_nondex_cmds = "/home/azureuser/flaky/cmds/run_nondex.sh"
-checkout_project_cmds = "/home/azureuser/flaky/cmds/checkout_project.sh"
+run_nondex_cmds = "cmds/run_nondex.sh"
+checkout_project_cmds = "cmds/checkout_project.sh"
 
 def generate_input(clone_dir,tests):
     test_list = []
