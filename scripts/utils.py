@@ -10,20 +10,165 @@ checkout_project_cmds = "scripts/cmds/checkout_project.sh"
 stash_project_cmds = "scripts/cmds/stash_project.sh"
 run_nondex_cmds = "scripts/cmds/run_nondex.sh"
 
-def extract_nondex_failure(entry, clone_dir):
+def extract_nondex_result(entry, clone_dir):
     sha = entry['SHA Detected']
     repo_name = entry['repo_name']
     module = entry['Module Path']
     test_full_name = entry['Fully-Qualified Test Name (packageName.ClassName.methodName)']
+    test_file_path = entry['test_file_path']
     repo_path = os.path.join(clone_dir, sha, repo_name)
     output = run_test_with_nondex(repo_path, module, test_full_name)
+    summary, msg = None, None
+    summary, msg = analyze_nondex_result(output)
+    add_err_msg, err_code = get_err_code_list(output, test_full_name, test_file_path)
+    print(test_file_path)
+    final_err_msg = f'{msg}\n{add_err_msg}'.replace('\n', '  ')
+    final_err_code = '\n'.join(err_code)
+    
+    err_method_names = get_err_method_names(output, test_file_path, test_full_name)
+    return summary, final_err_msg, final_err_code, err_method_names
+
+def parse_err_msg(output):
+    msgs = []
+    for line in output.split('\n'):
+        if line.startswith('[ERROR]'):
+            clean_line = line.strip().replace('[ERROR]', '')
+            if 'Time elapsed' in line or 'There are test failures' in line or 'Skipped:' in line:
+                continue
+            if clean_line not in msgs:
+                msgs.append(clean_line)
+    return '\n'.join(msgs)
+    
+def analyze_nondex_result(output):
+    result = None
+    if 'There are test failures' in output:
+        err_msg = parse_err_msg(output)
+        return 'FAILURE', err_msg
+    elif 'BUILD SUCCESS' in output and 'No Test Failed with this configuration' in output:
+        return "PASS", None
+    else:
+        # print(output)
+        exit(0)
+        
+
+from bs4 import BeautifulSoup
+from pathlib import Path
+        
+def get_err_code_list(output, test_full_name, test_file_path):
+    test_class_content = read_java(test_file_path)
+    test_method_name = test_full_name.split(".")[-1]
+    test_class = test_full_name.replace(f'.{test_method_name}', '')
+    err_msg_list = [] 
+    err_code_list = []
+    lineno_list = []
+    class_file = test_full_name.split(".")[-2] + ".java"
+    if "COMPILATION ERROR" in output:
+        err_msg_list, err_code_list = parse_compilation_err(output, test_full_name, test_class_content)
+        return err_msg_list, err_code_list
+
+    for output_line in output.split("\n"):
+        lineno = None
+        if class_file in output_line:
+            lineno_str = str(output_line).split(class_file + ":")[-1].split(")")[0]
+            try:
+                lineno = int(lineno_str)
+            except:
+                pass
+        if class_file in output_line and "[" in output_line and "]" in output_line:
+            lineno_str = str(output_line).split(class_file + ":")[-1].split("[")[-1].split(",")[0].split("]")[0]
+            try:
+                lineno = int(lineno_str)
+            except:
+                pass
+        if lineno != None and lineno not in lineno_list:
+            lineno_list.append(lineno)
+
+    for number in lineno_list:
+        err_code = test_class_content.split("\n")[int(number)-1]
+        if err_code.strip() not in err_code_list:
+            err_code_list.append(err_code.strip())
+
+    for line in output.split("\n"):
+        if "Please refer to" in line and "for the individual test results" in line:
+            xml_dir = line.split("Please refer to")[-1].split("for")[0].strip()
+            for root, dirs, files in os.walk(xml_dir):
+                for file in files:
+                    if file.endswith(".xml") and "TEST-" + test_class in file:
+                        xml_path = os.path.join(root, file)
+                        with open(xml_path, 'r') as f:
+                            data = f.read()
+                        bs_data = BeautifulSoup(data, 'xml')
+                        for tag in bs_data.find_all('testcase', {'classname':test_class}, {'name':test_method_name}):
+                            err_element = tag.find('error')
+                            if err_element:
+                                err_msg = err_element.get('message')
+                                err_type = err_element.get('type')
+                                if err_msg == None:
+                                    err_msg = err_type
+                                final_err_msg = ' '.join(err_msg.split())
+                                if final_err_msg not in err_msg_list:
+                                    err_msg_list.append(final_err_msg.strip())
+                                
+                            failure_element = tag.find('failure')
+                            if failure_element:
+                                failure_msg = failure_element.get('message')
+                                failure_type = failure_element.get('type')
+                                if failure_msg == None:
+                                    failure_msg = failure_type
+                                final_failure_msg = ' '.join(failure_msg.split())
+                                if final_failure_msg not in err_msg_list:
+                                    err_msg_list.append(final_failure_msg.strip())
+                            
+    return '\n'.join(err_msg_list), err_code_list
+
+def parse_compilation_err(output, test_full_name, test_file_path):
+    test_class_content = read_java(test_file_path)
+    class_file = test_full_name.split(".")[-2] + ".java"
+    err_code_list = []
+    lineno_list = []
+    for output_line in output.split("\n"):
+        lineno = None
+        if class_file in output_line:
+            lineno_str = str(output_line).split(class_file + ":")[-1].split(")")[0]
+            try:
+                lineno = int(lineno_str)
+            except:
+                pass
+        if class_file in output_line and "[" in output_line and "]" in output_line:
+            lineno_str = str(output_line).split(class_file + ":")[-1].split("[")[-1].split(",")[0].split("]")[0]
+            try:
+                lineno = int(lineno_str)
+            except:
+                pass
+        if lineno != None and lineno not in lineno_list:
+            lineno_list.append(lineno)
+    for number in lineno_list:
+        err_code = test_class_content.split("\n")[int(number)-1]
+        if err_code.strip() not in err_code_list:
+            err_code_list.append(err_code.strip())
+    
+    seq = output.split("[INFO] Finished at:")[-1].split("To see the full stack trace of the errors")[0].replace("-> [Help 1]", "")
+    for line in seq.split("\n"):
+        if "Failed to execute goal" in line:
+            continue
+        if not line.startswith("[ERROR]"):
+            continue
+        tmp_line = line.replace("[ERROR]","").strip()
+        if class_file in tmp_line:
+            msg = tmp_line.split("]")[-1]
+            if msg not in err_msgs:
+                err_msgs.append(msg)
+        else:
+            if tmp_line not in err_msgs:
+                err_msgs.append(tmp_line)
+    return '\n'.join(err_msgs), err_code_list
     
 
 def run_test_with_nondex(project_dir, module, test_full_name, jdk='8', nondex_times='4'):
     test = replace_last_symbol(test_full_name, ".", "#")
     result = subprocess.run(["bash", run_nondex_cmds, project_dir, module, test, jdk, nondex_times], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output = result.stdout.decode('utf-8')
-    print(output)
+    # print(output)
     return output
 
 def replace_last_symbol(source_string, replace_what, replace_with):
@@ -75,7 +220,8 @@ def get_test_files(test_full_name, clone_dir, repo_name, sha, module):
 def get_realted_helper(file_path):
     java_code = read_java(file_path)
     helper_methods = get_helper_methods(java_code)
-    return helper_methods
+    global_vars = get_global_vars(java_code)
+    return helper_methods, global_vars
 
 def get_helper_methods(code):
     method_list = parse_java_func_intervals(code)
@@ -100,10 +246,53 @@ def get_helper_methods(code):
     return res
 
 
+def get_err_method_names(nondex_output,test_file_path,test_full_name):
+    # print("get_line_caused_errors")
+    output_seq = nondex_output.split("\n")
+    test_class = test_file_path.split("/")[-1]
+    test_class_name = '.'.join(test_full_name.split(".")[:-1])
+
+    s_list = nondex_output.split("<<< FAILURE!")[1:]
+
+    line_nums = []
+    res_lines = []
+    method_names = []
+
+    for seq in output_seq:
+        if "\tat " in seq:
+            lines_info = (seq.split("\tat", 1)[1]).split("\n")
+            for line in lines_info:
+                if test_class_name in line and ":" in line and ")" in line:
+                    num = (line.split(":")[1]).split(")")[0]
+                    if num not in line_nums:
+                        line_nums.append(num)
+                    if test_class_name+"." in line:
+                        new_line = line.replace(" ","")
+                        method_name = new_line.split("(")[0].replace(test_class_name+".","")
+                        if method_name not in method_names:
+                            method_names.append(method_name)
+        elif test_class_name + ".java" in seq and ":" in seq and "[" in seq and "]" in seq and "," in seq:
+                    num = (seq.split("[")[1]).split(",")[0]
+                    if num not in line_nums:
+                        line_nums.append(num)
+    
+    for num in line_nums:
+        f = open(test_file_path)
+        lines = f.readlines()
+        line = lines[int(num)-1]
+        if line not in res_lines:
+            res_lines.append(line)
+
+    # print(line_nums)
+    # print(res_lines)
+    
+    return method_names
+
+
 
 #===fix
 
-def get_global_vars(code,start_line):
+def get_global_vars(code):
     fields = {}
     trees = javalang.parse.parse(code)
     for _, node in javalang.parse.parse(code):
@@ -122,8 +311,8 @@ def get_global_vars(code,start_line):
             #         node
             #     )
             # )
-            if node.start_position.line >= start_line:
-                continue
+            # if node.start_position.line >= start_line:
+            #     continue
             if node_name not in fields:
                 fields[node_name[0]] = stat[0]
     return fields
