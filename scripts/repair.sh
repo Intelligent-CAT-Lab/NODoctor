@@ -1,21 +1,20 @@
-inputCsv=$1 # all abs path
-cloneDir=$2
-apiKey=$3
-resdir=$4
-fixScript=$5
+InputCSV=$1 # all abs path
+CloneDir=$2
+ApiKey=$3
+ResultDIR=$4
+FixScript=$5
 
 timeStamp=$(echo -n $(date "+%Y-%m-%d %H:%M:%S") | shasum | cut -f 1 -d " ")
 
-mkdir -p ./${resdir}/${timeStamp}
-mkdir -p ./${resdir}/${timeStamp}/goodPatches
+mkdir -p ${ResultDIR}/${timeStamp}
+mkdir -p ${ResultDIR}/${timeStamp}/GoodPatches
 
-mainDir=/home/azureuser/flaky
-curDir=$(pwd)
-logDir=$(pwd)/${resdir}/${timeStamp}
-patchDir=${logDir}/goodPatches
-stash=/home/azureuser/flaky/stash.sh
-detailRes=${logDir}/detailRes.csv
-summaryRes=${logDir}/summaryRes.csv
+mainDir=$(pwd)/scripts
+logDir=$(pwd)/${ResultDIR}/${timeStamp}
+patchDir=${logDir}/GoodPatches
+stash=$(pwd)/scripts/cmds/stash_project.sh
+DetailRes=${logDir}/DetailRes.csv
+SummaryRes=${logDir}/SummaryRes.csv
 unfixedCsv=${logDir}/unfixed.csv
 
 
@@ -30,10 +29,10 @@ exec 1>$logDir/$timeStamp.log 2>&1
 cd ${mainDir}
 echo "* "CURRENT DIR $(pwd)
 
-echo bash -x ${stash} ${inputCsv} projects
-bash -x ${stash} ${inputCsv} projects
+echo bash -x ${stash} ${InputCSV} projects
+bash -x ${stash} ${InputCSV} projects
 
-echo python3 ${fixScript} ${inputCsv} ${cloneDir} ${apiKey} ${detailRes} ${summaryRes} ${patchDir} ${unfixedCsv} |&tee ${logDir}/main.log
-python3 ${fixScript} ${inputCsv} ${cloneDir} ${apiKey} ${detailRes} ${summaryRes} ${patchDir} ${unfixedCsv} |&tee ${logDir}/main.log
+echo python3 ${FixScript} ${InputCSV} ${CloneDir} ${ApiKey} ${DetailRes} ${SummaryRes} ${patchDir} ${unfixedCsv} |&tee ${logDir}/main.log
+python3 ${FixScript} ${InputCSV} ${CloneDir} ${ApiKey} ${DetailRes} ${SummaryRes} ${patchDir} ${unfixedCsv} |&tee ${logDir}/main.log
 
 echo "* "ENDING at $(date)
