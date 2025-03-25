@@ -2,12 +2,85 @@ import javalang
 from typing import Set, Tuple
 import sys
 import re
+import csv
+import os
+import subprocess
 
+checkout_project_cmds = "scripts/cmds/checkout_project.sh"
+stash_project_cmds = "scripts/cmds/stash_project.sh"
+run_nondex_cmds = "scripts/cmds/run_nondex.sh"
+
+def extract_nondex_failure(entry, clone_dir):
+    sha = entry['SHA Detected']
+    repo_name = entry['repo_name']
+    module = entry['Module Path']
+    test_full_name = entry['Fully-Qualified Test Name (packageName.ClassName.methodName)']
+    repo_path = os.path.join(clone_dir, sha, repo_name)
+    output = run_test_with_nondex(repo_path, module, test_full_name)
+    
+
+def run_test_with_nondex(project_dir, module, test_full_name, jdk='8', nondex_times='4'):
+    test = replace_last_symbol(test_full_name, ".", "#")
+    result = subprocess.run(["bash", run_nondex_cmds, project_dir, module, test, jdk, nondex_times], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output = result.stdout.decode('utf-8')
+    print(output)
+    return output
+
+def replace_last_symbol(source_string, replace_what, replace_with):
+    head, _sep, tail = source_string.rpartition(replace_what)
+    return head + replace_with + tail
+
+
+def locate_test_code(potential_test_file, test_full_name):
+    java_code = read_java(potential_test_file)
+    method_name = test_full_name.split('.')[-1]
+    test_code = None
+    test_code = get_test_method(method_name, java_code)
+    return test_code
+
+def git_checkout_file(projectDir,file_path):
+    print(f'* Git checkout {file_path} in {projectDir}')
+    result = subprocess.run(["bash",checkout_project_cmds,projectDir,file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output = result.stdout.decode('utf-8')
+    print(f'* {output}')
+
+def read_csv(filepath):
+    data = []
+    with open(filepath, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            data.append(row)
+    return data
+
+def get_file_lists(repo_path, test_full_name, module):
+    potential_file_paths = []
+    test_class_short_name = test_full_name.split('.')[-2]
+    test_class_path = "/".join(test_full_name.split('.')[:-1])
+    for root, dirs, files in os.walk(repo_path):
+        for file in files:
+            if not file.endswith(test_class_short_name + ".java"):
+                continue
+            file_path = os.path.join(root, file)
+            if test_class_path in file_path and module in file_path \
+                 and "/test/" in file_path.lower():
+                    potential_file_paths.append(file_path)
+    return potential_file_paths
+
+
+def get_test_files(test_full_name, clone_dir, repo_name, sha, module):
+    repo_path = os.path.join(clone_dir, sha, repo_name)
+    potential_file_paths = get_file_lists(repo_path, test_full_name, module)
+    return potential_file_paths
+    
+def get_realted_helper(file_path):
+    java_code = read_java(file_path)
+    helper_methods = get_helper_methods(java_code)
+    return helper_methods
 
 def get_helper_methods(code):
     method_list = parse_java_func_intervals(code)
     start_lines = []
-    res = {"before":{},"after":{},"earlist_line":{},"method_names":[]}
+    res = {"before":{},"after":{},"earlist_line":{},"helper_method_names":[]}
     for method_info in method_list:
         start, end, method_name, method_code, node = method_info[0:]
         start_lines.append(start.line)
@@ -17,14 +90,18 @@ def get_helper_methods(code):
                     if method_name not in res["before"]:
                         method_code = get_string(code,start,end)
                         res["before"][method_name] = method_code
-                        res["method_names"].append(method_name)
+                        res["helper_method_names"].append(method_name)
                 elif ele.name == "AfterClass" or ele.name == "After" or ele.name == "AfterAll":
                     if method_name not in res["after"]:
                         method_code = get_string(code,start,end)
                         res["after"][method_name] = method_code
-                        res["method_names"].append(method_name)
+                        res["helper_method_names"].append(method_name)
     res["earlist_line"] = min(start_lines)
     return res
+
+
+
+#===fix
 
 def get_global_vars(code,start_line):
     fields = {}
@@ -107,7 +184,7 @@ def read_imports(code):
 
 def get_test_method(test_name,class_content):
     method_list = parse_java_func_intervals(class_content)
-    res = None
+    res = {}
     for method_info in method_list:
         start, end, method_name, method_code, node = method_info[0:]
         if test_name == method_name:
@@ -116,7 +193,10 @@ def get_test_method(test_name,class_content):
             #         if ele.name == "Test":
             #             res = [start,end,method_name,method_code,node.annotations]
             # else: # no annotation
-            res = [start,end,method_name,method_code,node.annotations]
+            res = {
+                'start': start, 'end': end, 'method_name': method_name,
+                'method_code': method_code, 'node.annotations': node.annotations
+            }
     return res
 
 def get_err_method(test_name,class_content,failure_lines):
@@ -182,7 +262,6 @@ def read_java(f):
     fh = open(f, 'r', errors='ignore')
     data = fh.read()
     return data
-    # parse_java_func_intervals(data,f)
 
 def clean_code(code):
     code_no_comments = remove_comments(code)
