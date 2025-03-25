@@ -20,7 +20,7 @@ run_test(){
 
 echo "* "STARTING at $(date) 
 echo "* "LOG at ${logDir}
-echo "* "RUNNING NonDex on ID tests
+echo "* "RUNNING NonDex
 echo "* "REPO VERSION $(git rev-parse HEAD)
 
 # echo ${mainDir}/${sha}/${project}
