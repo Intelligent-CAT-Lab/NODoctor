@@ -20,6 +20,11 @@ https://github.com/apache/nifi,2bd752d868a8f3e36113b078bb576cf054e945e8,nifi-com
 ```
 - `CloneDIR`: the directory where all Java projects to be cloned
 
+After cloning done, you can install all the projects:   
+```
+bash -x scripts/install.sh [InputCSV] [CloneDIR]
+```
+
 3. To reproduce the results, one can run the following command:
 ```
 bash -x scripts/repair.sh [InputCSV] [CloneDIR] [APIKey] [ResultDir] NOD_repair.py
