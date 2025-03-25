@@ -15,7 +15,7 @@ patchDir=${logDir}/GoodPatches
 stash=$(pwd)/scripts/cmds/stash_project.sh
 DetailRes=${logDir}/DetailRes.csv
 SummaryRes=${logDir}/SummaryRes.csv
-unfixedCsv=${logDir}/unfixed.csv
+UnfixedCSV=${logDir}/unfixed.csv
 
 
 echo "* "STARTING at $(date) 
@@ -32,7 +32,7 @@ echo "* "CURRENT DIR $(pwd)
 echo bash -x ${stash} ${InputCSV} projects
 bash -x ${stash} ${InputCSV} projects
 
-echo python3 ${FixScript} ${InputCSV} ${CloneDir} ${ApiKey} ${DetailRes} ${SummaryRes} ${patchDir} ${unfixedCsv} |&tee ${logDir}/main.log
-python3 ${FixScript} ${InputCSV} ${CloneDir} ${ApiKey} ${DetailRes} ${SummaryRes} ${patchDir} ${unfixedCsv} |&tee ${logDir}/main.log
+echo python3 ${FixScript} ${InputCSV} ${CloneDir} ${ApiKey} ${DetailRes} ${SummaryRes} ${patchDir} ${UnfixedCSV} |&tee ${logDir}/main.log
+python3 ${FixScript} ${InputCSV} ${CloneDir} ${ApiKey} ${DetailRes} ${SummaryRes} ${patchDir} ${UnfixedCSV} |&tee ${logDir}/main.log
 
 echo "* "ENDING at $(date)
