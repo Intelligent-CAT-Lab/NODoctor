@@ -61,8 +61,9 @@ def get_model_response(entry, initial = False):
     test_method_code = entry['method_code']
     test_method_name = entry['method_name']
     globals_code = '\n'.join(entry['global_vars'].values())
+    
     parts = [entry['before'], entry['after'], globals_code, test_method_code]
-    err_class_code = '\n'.join(filter(None, parts))
+    err_class_code = '\n'.join(str(p) for p in parts if p)
     
     if initial:
         err_msg = entry['initial_err_msg']
@@ -85,7 +86,7 @@ def get_model_response(entry, initial = False):
     - Do not change signatures and modifiers of all methods. \n \
     - Fix the flakiness by modifying the provided code. You may make changes to all methods in the class. But do not add code out of methods. \n \
     - Print all code between //<fix start> and //<fix end>.\n \
-    - Update dependencies in pom.xml if needed, put the code between <!-- <pom.xml start> --> and <!-- <pom.xml end> -->.  Provide a specific version for the dependency you add. Do not add existing dependencies. Do not include my artifact in your pom.xml code.\n \
+    - Update dependencies in pom.xml if needed, put the code between ```xml and ```.  Provide a specific version for the dependency you add. Do not add existing dependencies. Do not include my artifact in your pom.xml code.\n \
     - Your code should be compilable without any errors.\n \
     - Make sure all the arguments are correct.\n \
     - Use compatible types for all variables.\n \
@@ -93,9 +94,9 @@ def get_model_response(entry, initial = False):
     - Update import list if needed, put the code between //<import start> and //<import end>. \n \
     - Assume required classes for original code are setup correctly and do not include them in your code. \n "
     
-    print(prompt)
+    print(f'* Prompt:\n{prompt}')
     response = prompt_model(prompt)
-    print(response)
+    print(f'* Response:\n{response}')
     return prompt, response
         
 def prompt_model(prompt, model_name='gpt-4o-mini'):
@@ -118,7 +119,7 @@ def prompt_model(prompt, model_name='gpt-4o-mini'):
         )
         response = outputs.choices[0].message.content
     except Exception as e:
-        print(e)
+        print(f'Exception:\n{e}')
         response = f'{e}'
     return response
         
@@ -153,10 +154,15 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
                 initial = False
             prompt, response = get_model_response(entry, initial)
             patch = parse_patch(response, entry)
+            print('* ==================================Current Patch Start:\n==================================')
+            for key in patch:
+                print(f'{key}:\n{patch[key]}')
+            print('* ==================================Current Patch End:\n==================================')
+
             updated_class = apply_patch(entry, patch)
             if updated_class!= None:
                 summary, err_msg, err_code, err_method_names = extract_nondex_result(entry, clone_dir)
-                print(f'Current Result:\n{summary}\n{err_msg}\n{err_code}\n{err_method_names}')
+                print(f'* Current Result:\n{summary}\n{err_msg}\n{err_code}\n{err_method_names}')
                 new_res = {
                     'prev_summary': summary,
                     'prev_err_msg': err_msg,
@@ -166,7 +172,8 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
                 entry.update(new_res)
                 entry['intermediate_log'] = {}
                 new_helper_methods, new_global_vars = get_realted_helper(entry['test_file_path'])
-                new_method = locate_test_code(entry['test_file_path'], entry['Fully-Qualified Test Name (packageName.ClassName.methodName)'])
+                new_method_info = locate_test_code(entry['test_file_path'], entry['Fully-Qualified Test Name (packageName.ClassName.methodName)'])
+                new_method = new_method_info['method_code']
                 new_info = {
                     'method_code': new_method,
                     'global_vars': new_global_vars,

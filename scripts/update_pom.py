@@ -25,12 +25,12 @@ def add_dependency(pom_path, dependency_lines):
                 if dependency_exists(pom_lines, artifactId):
                     print(artifactId, " already in pom.xml, no need to add")
                 else:
-                    print(artifactId, " will be added")
+                    print(artifactId, " will be potentially added")
                     for line in pom_lines:
                         updated_pom_lines.append(line)
                         if '<dependencies>' in line:
                             updated_pom_lines.extend(d + "</dependency>\n")
-                            print(artifactId, " added", pom_path)
+                            print(artifactId, " added at ", pom_path)
                     with open(pom_path, 'w') as pom_file_new:
                         pom_file_new.writelines(updated_pom_lines)
                         print(pom_path)

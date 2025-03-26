@@ -123,6 +123,9 @@ def parse_patch_gpt(response, test_method_name, test_class_content):
     elif "<pom.xml start>" in response and "<!-- <pom.xml end>" in response:
         pom_stat = (response.split("<pom.xml start>")[1]).split("<!-- <pom.xml end>")[0]
         patch["pom"] = pom_stat
+    elif "```xml" in response and "```" in response:
+        pom_stat = (response.split("```xml")[1]).split("```")[0]
+        patch["pom"] = pom_stat
 
     import_pattern = re.compile(r"import\s+(static\s+)?([\w\.]+(\.\*)?);", re.MULTILINE)
 
