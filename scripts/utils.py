@@ -1,10 +1,10 @@
-import javalang
-from typing import Set, Tuple
-import sys
-import re
 import csv
+import javalang
 import os
+import re
+import sys
 import subprocess
+from typing import Set, Tuple
 
 checkout_project_cmds = "scripts/cmds/checkout_project.sh"
 stash_project_cmds = "scripts/cmds/stash_project.sh"

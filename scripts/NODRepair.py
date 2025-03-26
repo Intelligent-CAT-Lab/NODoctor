@@ -1,13 +1,14 @@
 import argparse
 import csv
+import json
+import openai
 import os
 import sys
-import openai
-import json
 from openai import OpenAI
-from utils import read_csv, get_test_files, locate_test_code, \
-    get_realted_helper, get_global_vars, \
-        extract_nondex_result, get_err_method_names, parse_patch, apply_patch, read_java, git_stash
+from utils import read_csv, get_test_files, \
+    locate_test_code, get_realted_helper, get_global_vars, \
+        extract_nondex_result, get_err_method_names, \
+            parse_patch, apply_patch, read_java, git_stash
 
 def process_single_entry(entry, clone_dir):
     test_full_name = entry['Fully-Qualified Test Name (packageName.ClassName.methodName)']
