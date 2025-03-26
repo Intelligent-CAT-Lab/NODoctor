@@ -309,6 +309,9 @@ def run_test_with_nondex(project_dir, module, test_full_name, jdk='8', nondex_ti
     test = replace_last_symbol(test_full_name, ".", "#")
     result = subprocess.run(["bash", run_nondex_cmds, project_dir, module, test, jdk, nondex_times], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output = result.stdout.decode('utf-8')
+    print("* ======================Full log of nondex starts =================")
+    print(output)
+    print("* ======================Full log of nondex ends =================")
     return output
 
 def replace_last_symbol(source_string, replace_what, replace_with):
