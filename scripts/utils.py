@@ -38,6 +38,126 @@ def parse_err_msg(output):
             if clean_line not in msgs:
                 msgs.append(clean_line)
     return '\n'.join(msgs)
+
+def parse_patch(response, entry):
+    test_method_name = entry['method_name']
+    test_file_path = entry['test_file_path']
+    test_class_content = read_java(test_file_path)
+    patch = parse_patch_gpt(response, test_method_name, test_class_content)
+    return patch
+
+def apply_patch(entry, patch):
+    print("* Applying Patch")
+    file_path, original_test_class_content = entry['test_file_path'], entry['original_test_class_content']
+    test_method_name, sha, project_dir = entry['method_name'], entry['SHA Detected'], entry['repo_path']
+    
+    put_on_patch(file_path, original_test_class_content, test_method_name, patch, sha, project_dir)
+
+import update_pom
+def put_on_patch(file_path, original_test_class_content, test_method_name, patch, sha, project_dir):
+    fixed_class = original_test_class_content
+    old_test_method_code = ""
+    old_test_info = get_test_method(test_method_name, original_test_class_content) #res = [start,end,method_name,method_code,node.annotations]
+    old_test_method = old_test_info['method_code']
+    if old_test_method != None:
+        old_test_method_code = old_test_method
+    if patch["test_code"] != None:
+        fixed_class = original_test_class_content.replace(old_test_method_code, "\n" + patch["test_code"] + "\n")
+        print("Code Replaced.")
+    final_class = fixed_class
+
+    if patch["import"] != []:
+        package = get_package(fixed_class)
+        if package != None:
+            seq = fixed_class.split(package)
+            final_class = seq[0] + "\n" + package + "\n" + "\n".join(patch["import"]) + "\n" + seq[1]
+        else:
+            seq = fixed_class.split("public class ")
+            print(fixed_class)
+            final_class = seq[0] + "\n".join(patch["import"]) + "\n" + "public class " + seq[1]
+    
+    f = open(file_path, "w", errors='ignore')
+    f.write(final_class)
+    f.close()
+    
+    if patch["pom"] != None:
+        dep2add = patch["pom"]
+        deps = dep2add
+        if "<dependencies>" in patch["pom"]:
+            dep2add  = patch["pom"].replace("<dependencies>","")
+        if "</dependencies>" in dep2add:
+            deps = dep2add.replace("</dependencies>","")
+        if "/src/" in file_path:
+            root_path = file_path.split("/src/")[0]
+            pom_path = os.path.join(root_path,"pom.xml")
+            if os.path.exists(pom_path):
+                git_checkout_file(project_dir, pom_path)
+                update_pom.add_dependency(pom_path,deps)
+                print("POM Updated.")
+
+    return final_class
+
+def parse_patch_gpt(response, test_method_name, test_class_content):
+    ifstitched = False
+    patch = {
+        "test_code": None,
+        "import": [],
+        "pom": None
+    }
+    if "<!-- <pom.xml start> -->" in response and "<!-- <pom.xml end> -->" in response:
+        pom_stat = (response.split("<!-- <pom.xml start> -->")[1]).split("<!-- <pom.xml end> -->")[0]
+        patch["pom"] = pom_stat
+    elif "<pom.xml start>" in response and "<!-- <pom.xml end>" in response:
+        pom_stat = (response.split("<pom.xml start>")[1]).split("<!-- <pom.xml end>")[0]
+        patch["pom"] = pom_stat
+
+    import_pattern = re.compile(r"import\s+(static\s+)?([\w\.]+(\.\*)?);", re.MULTILINE)
+
+    original_imp_matches = import_pattern.findall(test_class_content)
+    original_imports = []
+    for imp_match in original_imp_matches:
+        if imp_match[0].strip() == "static" and imp_match[1] != '':
+            imp_stat = "import static " + imp_match[1] + ";"
+            original_imports.append(imp_stat)
+        elif imp_match[0].strip() == "" and imp_match[1] != '':
+            imp_stat = "import " + imp_match[1] + ";"
+            original_imports.append(imp_stat)
+
+    imp_matches = import_pattern.findall(response)
+    for imp_match in imp_matches:
+        if imp_match[0].strip() == "static" and imp_match[1] != '':
+            imp_stat = "import static " + imp_match[1] + ";"
+            short_name = "." + imp_stat.split(".")[-1]
+            if imp_stat not in original_imports and short_name not in str(original_imports) \
+            and imp_stat not in patch["import"]:
+                print("Will add {}".format(imp_stat))
+                patch["import"].append(imp_stat)
+            else:
+                print("Will not add {}".format(imp_stat))
+                if short_name in str(original_imports) and imp_stat not in str(original_imports):
+                    print("Conflict_Import {}".format(short_name))
+                    ifstitched = True
+        elif imp_match[0].strip() == "" and imp_match[1] != '':
+            imp_stat = "import " + imp_match[1] + ";"
+            short_name = "." + imp_stat.split(".")[-1]
+            if imp_stat not in original_imports and short_name not in str(original_imports) \
+            and imp_stat not in patch["import"]:
+                print("Will add {}".format(imp_stat))
+                patch["import"].append(imp_stat)
+            else:
+                print("Will not add {}".format(imp_stat))
+                if short_name in str(original_imports) and imp_stat not in str(original_imports):
+                    print("Conflict_Import {}".format(short_name))
+                    ifstitched = True
+
+    java_methods,if_parsed = extract_java_code(response)
+    if if_parsed == True:
+        for method in java_methods:
+            method_name = method[2]
+            method_code = method[3]
+            if method_name == test_method_name:
+                patch["test_code"] = (method_code)
+    return patch
     
 def analyze_nondex_result(output):
     result = None
@@ -336,9 +456,7 @@ def get_package(code):
     try:
         trees = javalang.parse.parse(code)
         if trees.package:
-            print("***********package********")
             full_package = "package " + trees.package.name + ";"
-            print(full_package)
             return full_package
     except:
         print("package not found")
@@ -511,6 +629,7 @@ def t(response):
                         potential_match_final = final_match
     # print(potential_match_final)
 
+
 def extract_java_code(text):
     lst = text.replace("```java","\n").replace("```","\n").replace("//<fix start>","\n").replace("//<fix end>","\n").split("\n")
     left = 0
@@ -547,17 +666,10 @@ def extract_java_code(text):
         dummy_code += method
     dummy_code += "\n}\n"
 
+    # print(dummy_code)
+
     method_list = parse_java_func_intervals(dummy_code)
-    print(method_list)
     if method_list != None:
         return method_list,True
     else:
         return methods,False
-
-    # for key in methods:
-    #     for line in methods[key]:
-    #         print(line)
-    #     if "()" in methods[key][0] and "{" in methods[key][0]:
-    #         potential_method_name = (methods[key][0].split("()"))[0].split(" ")[-1]
-    #         print(potential_method_name)
-    #         key = potential_method_name
