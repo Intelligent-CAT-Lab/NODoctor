@@ -3,10 +3,10 @@ cloneDir=$2 # dir to clone all projects
 
 timeStamp=$(echo -n $(date "+%Y-%m-%d %H:%M:%S") | shasum | cut -f 1 -d " ")
 
-mkdir -p ./output/$timeStamp/install_logs
+mkdir -p install_output/$timeStamp/install_logs
 
 mainDir=$(pwd)/${cloneDir}
-logDir=$(pwd)/output/$timeStamp/install_logs
+logDir=$(pwd)/install_output/$timeStamp/install_logs
 
 exec 3>&1 4>&2
 trap $(exec 2>&4 1>&3) 0 1 2 3
