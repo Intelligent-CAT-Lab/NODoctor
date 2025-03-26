@@ -28,6 +28,11 @@ def extract_nondex_result(entry, clone_dir):
     err_method_names = get_err_method_names(output, test_file_path, test_full_name)
     return summary, final_err_msg, final_err_code, err_method_names
 
+def git_stash(projectDir):
+    result = subprocess.run(["bash",stash_project_cmds,projectDir], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output = result.stdout.decode('utf-8')
+    print(output)
+
 def parse_err_msg(output):
     msgs = []
     for line in output.split('\n'):
@@ -48,10 +53,11 @@ def parse_patch(response, entry):
 
 def apply_patch(entry, patch):
     print("* Applying Patch")
+    final_class = None
     file_path, original_test_class_content = entry['test_file_path'], entry['original_test_class_content']
     test_method_name, sha, project_dir = entry['method_name'], entry['SHA Detected'], entry['repo_path']
-    
-    put_on_patch(file_path, original_test_class_content, test_method_name, patch, sha, project_dir)
+    final_class = put_on_patch(file_path, original_test_class_content, test_method_name, patch, sha, project_dir)
+    return final_class
 
 import update_pom
 def put_on_patch(file_path, original_test_class_content, test_method_name, patch, sha, project_dir):

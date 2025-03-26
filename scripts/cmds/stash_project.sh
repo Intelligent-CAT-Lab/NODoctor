@@ -1,7 +1,11 @@
-project=$1
-sha=$2
-cloneDir=$3 #abs path
+projectDir=$1 #abs path
 
-cd ${cloneDir}/${sha}/${project}
-echo "git stash"
-git stash
+if [[ -d ${projectDir} ]]; then
+    echo "${projectDir} does exist."
+    cd ${projectDir}
+    echo "git stash"
+    git stash
+else
+    echo PWD $(pwd)
+    echo "${projectDir} does not exist."
+fi

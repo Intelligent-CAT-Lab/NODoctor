@@ -6,7 +6,7 @@ import openai
 from openai import OpenAI
 from utils import read_csv, get_test_files, locate_test_code, \
     get_realted_helper, get_global_vars, \
-        extract_nondex_result, get_err_method_names, parse_patch, apply_patch, read_java
+        extract_nondex_result, get_err_method_names, parse_patch, apply_patch, read_java, git_stash
 
 def process_single_entry(entry, clone_dir):
     test_full_name = entry['Fully-Qualified Test Name (packageName.ClassName.methodName)']
@@ -128,6 +128,8 @@ def repair_single_entry(entry, clone_dir, iter = 5):
     'helper_method_names', 'repo_name','test_file_path', 'global_vars'])"""
     # initial run check with nondex 
     print(f"* Process single entry...")
+    repo_path = entry['repo_path']
+    git_stash(repo_path)
     initial_summary, initial_err_msg, initial_err_code, initial_err_method_names = extract_nondex_result(entry, clone_dir)
     if initial_summary == "PASS":
         entry.update({'repair_result': 'Initial run with no failures!'})
@@ -142,7 +144,11 @@ def repair_single_entry(entry, clone_dir, iter = 5):
         print(entry.keys())
         prompt, response = get_model_response(entry, initial = True)
         patch = parse_patch(response, entry)
-        apply_patch(entry, patch)
+        updated_class = apply_patch(entry, patch)
+        if updated_class!= None:
+            summary, err_msg, err_code, err_method_names = extract_nondex_result(entry, clone_dir)
+            print(summary, err_msg, err_code, err_method_names)
+
     
     
     # prompt
