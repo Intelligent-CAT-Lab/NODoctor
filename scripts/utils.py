@@ -106,7 +106,7 @@ def put_on_patch(file_path, original_test_class_content, test_method_name, patch
             if os.path.exists(pom_path):
                 git_checkout_file(project_dir, pom_path)
                 update_pom.add_dependency(pom_path,deps)
-                print("POM Updated.")
+                print("POM checking done.")
 
     return final_class
 
@@ -178,12 +178,12 @@ def parse_patch_gpt(response, test_method_name, test_class_content):
 def analyze_nondex_result(output):
     result, err_msg = None, []
     if 'There are test failures' in output:
-        err_msg = parse_err_msg(output)
+        # err_msg = parse_err_msg(output)
         return 'FAILURE', err_msg
     elif 'BUILD SUCCESS' in output and 'No Test Failed with this configuration' in output:
         return "PASS", []
     elif 'BUILD FAILURE' in output and 'COMPILATION ERROR' in output:
-        err_msg = parse_err_msg(output)
+        # err_msg = parse_err_msg(output)
         return 'COMPILATIO_NERROR', err_msg
     else:
         print(output)
@@ -308,7 +308,6 @@ def run_test_with_nondex(project_dir, module, test_full_name, jdk='8', nondex_ti
     test = replace_last_symbol(test_full_name, ".", "#")
     result = subprocess.run(["bash", run_nondex_cmds, project_dir, module, test, jdk, nondex_times], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output = result.stdout.decode('utf-8')
-    # print(output)
     return output
 
 def replace_last_symbol(source_string, replace_what, replace_with):

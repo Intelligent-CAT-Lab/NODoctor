@@ -133,7 +133,11 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
     repo_path = entry['repo_path']
     git_stash(repo_path)
     test_full_name = entry['Fully-Qualified Test Name (packageName.ClassName.methodName)']
-    result_json = os.path.join(output_dir, f'{test_full_name}.json')
+    sha = entry['SHA Detected']
+    repo_name = entry['repo_name']
+    result_sub_dir = os.path.join(output_dir, repo_name, sha)
+    os.makedirs(result_sub_dir, exist_ok=True)
+    result_json = os.path.join(result_sub_dir, f'{test_full_name}.json')
     initial_summary, initial_err_msg, initial_err_code, initial_err_method_names = extract_nondex_result(entry, clone_dir)
     if initial_summary == "PASS":
         entry.update({'initial_summary': 'Initial run with no failures!', 'result_json': result_json})
@@ -154,10 +158,10 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
                 initial = False
             prompt, response = get_model_response(entry, initial)
             patch = parse_patch(response, entry)
-            print('* ==================================Current Patch Start:\n==================================')
+            print('* ==================================Current Patch Start==================================\n')
             for key in patch:
                 print(f'{key}:\n{patch[key]}')
-            print('* ==================================Current Patch End:\n==================================')
+            print('* ==================================Current Patch End==================================\n')
 
             updated_class = apply_patch(entry, patch)
             if updated_class!= None:
@@ -170,7 +174,8 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
                     'prev_err_method_names': err_method_names
                 }
                 entry.update(new_res)
-                entry['intermediate_log'] = {}
+                if 'intermediate_log' not in entry:
+                    entry['intermediate_log'] = {}
                 new_helper_methods, new_global_vars = get_realted_helper(entry['test_file_path'])
                 new_method_info = locate_test_code(entry['test_file_path'], entry['Fully-Qualified Test Name (packageName.ClassName.methodName)'])
                 new_method = new_method_info['method_code']
@@ -188,7 +193,8 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
                     break
                 
             current_iter += 1
-            
+    
+    print(entry.keys())
     with open(entry['result_json'], "w", encoding="utf-8") as f:
         json.dump(make_serializable(entry), f, indent=4) 
         
