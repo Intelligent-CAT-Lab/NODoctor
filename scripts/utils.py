@@ -85,7 +85,7 @@ def put_on_patch(file_path, original_test_class_content, test_method_name, patch
             final_class = seq[0] + "\n" + package + "\n" + "\n".join(patch["import"]) + "\n" + seq[1]
         else:
             seq = fixed_class.split("public class ")
-            print(fixed_class)
+            # print(fixed_class)
             final_class = seq[0] + "\n".join(patch["import"]) + "\n" + "public class " + seq[1]
     
     f = open(file_path, "w", errors='ignore')
@@ -187,7 +187,8 @@ def analyze_nondex_result(output):
         return 'COMPILATIO_NERROR', err_msg
     else:
         print(output)
-        exit(0)
+        raise Exception('Unexpected nondex output!')
+        # exit(0)
         
 
 from bs4 import BeautifulSoup
@@ -421,9 +422,6 @@ def get_err_method_names(nondex_output,test_file_path,test_full_name):
         line = lines[int(num)-1]
         if line not in res_lines:
             res_lines.append(line)
-
-    # print(line_nums)
-    # print(res_lines)
     
     return method_names
 
@@ -638,7 +636,6 @@ def t(response):
                     final_match = "public void " + new_string
                     if final_match.count("{") == final_match.count("}"):
                         potential_match_final = final_match
-                        # print("done")
                 elif "void" in potential_match_final:
                     tmpstr = potential_match_final.split("void ")[1]
                     k = tmpstr.rfind("}")
@@ -646,7 +643,6 @@ def t(response):
                     final_match = "public void " + new_string
                     if final_match.count("{") == final_match.count("}"):
                         potential_match_final = final_match
-    # print(potential_match_final)
 
 
 def extract_java_code(text):
@@ -685,7 +681,6 @@ def extract_java_code(text):
         dummy_code += method
     dummy_code += "\n}\n"
 
-    # print(dummy_code)
 
     method_list = parse_java_func_intervals(dummy_code)
     if method_list != None:

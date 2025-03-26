@@ -140,7 +140,7 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
     result_json = os.path.join(result_sub_dir, f'{test_full_name}.json')
     initial_summary, initial_err_msg, initial_err_code, initial_err_method_names = extract_nondex_result(entry, clone_dir)
     if initial_summary == "PASS":
-        entry.update({'initial_summary': 'Initial run with no failures!', 'result_json': result_json})
+        entry.update({'initial_summary': 'Initial run with no failures!', 'result_json': result_json, 'final_patch': {}})
     elif initial_summary == 'FAILURE':
         entry.update({
             'initial_summary': initial_summary,
@@ -190,11 +190,12 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
                 
                 if summary == 'PASS':
                     fixed = True
+                    entry['final_patch'] = patch
                     break
                 
             current_iter += 1
     
-    print(entry.keys())
+    
     with open(entry['result_json'], "w", encoding="utf-8") as f:
         json.dump(make_serializable(entry), f, indent=4) 
         
