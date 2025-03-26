@@ -30,5 +30,8 @@ def add_dependency(pom_path, dependency_lines):
                         updated_pom_lines.append(line)
                         if '<dependencies>' in line:
                             updated_pom_lines.extend(d + "</dependency>\n")
+                            print(artifactId, " added", pom_path)
                     with open(pom_path, 'w') as pom_file_new:
                         pom_file_new.writelines(updated_pom_lines)
+                        print(pom_path)
+                        

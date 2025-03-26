@@ -18,11 +18,14 @@ def extract_nondex_result(entry, clone_dir):
     test_file_path = entry['test_file_path']
     repo_path = os.path.join(clone_dir, sha, repo_name)
     output = run_test_with_nondex(repo_path, module, test_full_name)
-    summary, msg = None, None
+    summary, msg = None, []
     summary, msg = analyze_nondex_result(output)
     add_err_msg, err_code = get_err_code_list(output, test_full_name, test_file_path)
-    print(test_file_path)
-    final_err_msg = f'{msg}\n{add_err_msg}'.replace('\n', '  ')
+    final_err_msg_list = []
+    for item in msg + add_err_msg:
+        if item not in final_err_msg_list:
+            final_err_msg_list.append(item)
+    final_err_msg = '\n'.join(final_err_msg_list)
     final_err_code = '\n'.join(err_code)
     
     err_method_names = get_err_method_names(output, test_file_path, test_full_name)
@@ -39,11 +42,13 @@ def parse_err_msg(output):
     for line in output.split('\n'):
         if line.startswith('[ERROR]'):
             clean_line = line.strip().replace('[ERROR]', '')
-            if 'Time elapsed' in line or 'There are test failures' in line or 'Skipped:' in line:
+            if 'Time elapsed' in line \
+                or 'There are test failures' in line \
+                or 'Skipped:' in line or 'Failed to execute goal' in line:
                 continue
             if clean_line not in msgs:
                 msgs.append(clean_line)
-    return '\n'.join(msgs)
+    return msgs
 
 def parse_patch(response, entry):
     test_method_name = entry['method_name']
@@ -97,6 +102,7 @@ def put_on_patch(file_path, original_test_class_content, test_method_name, patch
         if "/src/" in file_path:
             root_path = file_path.split("/src/")[0]
             pom_path = os.path.join(root_path,"pom.xml")
+            print(f'Working on pom.xml: {pom_path}')
             if os.path.exists(pom_path):
                 git_checkout_file(project_dir, pom_path)
                 update_pom.add_dependency(pom_path,deps)
@@ -167,12 +173,12 @@ def parse_patch_gpt(response, test_method_name, test_class_content):
     return patch
     
 def analyze_nondex_result(output):
-    result = None
+    result, err_msg = None, []
     if 'There are test failures' in output:
         err_msg = parse_err_msg(output)
         return 'FAILURE', err_msg
     elif 'BUILD SUCCESS' in output and 'No Test Failed with this configuration' in output:
-        return "PASS", None
+        return "PASS", []
     elif 'BUILD FAILURE' in output and 'COMPILATION ERROR' in output:
         err_msg = parse_err_msg(output)
         return 'COMPILATIO_NERROR', err_msg
@@ -249,7 +255,7 @@ def get_err_code_list(output, test_full_name, test_file_path):
                                 if final_failure_msg not in err_msg_list:
                                     err_msg_list.append(final_failure_msg.strip())
                             
-    return '\n'.join(err_msg_list), err_code_list
+    return err_msg_list, err_code_list
 
 def parse_compilation_err(output, test_full_name, test_file_path):
     test_class_content = read_java(test_file_path)
@@ -292,7 +298,7 @@ def parse_compilation_err(output, test_full_name, test_file_path):
         else:
             if tmp_line not in err_msgs:
                 err_msgs.append(tmp_line)
-    return '\n'.join(err_msgs), err_code_list
+    return err_msgs, err_code_list
     
 
 def run_test_with_nondex(project_dir, module, test_full_name, jdk='8', nondex_times='4'):

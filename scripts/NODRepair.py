@@ -3,6 +3,7 @@ import csv
 import os
 import sys
 import openai
+import json
 from openai import OpenAI
 from utils import read_csv, get_test_files, locate_test_code, \
     get_realted_helper, get_global_vars, \
@@ -46,13 +47,13 @@ def get_test_code(potential_test_file, test_full_name):
     localization_info = locate_test_code(potential_test_file, test_full_name)
     return localization_info
 
-def process_input_csv(input_csv, clone_dir):
+def process_input_csv(input_csv, clone_dir, output_dir):
     entries = read_csv(input_csv)
     for entry in entries:
         single_entry_addinfo = process_single_entry(entry, clone_dir)
         entry.update(single_entry_addinfo)
         
-        repair_single_entry(entry, clone_dir)
+        repair_single_entry(entry, clone_dir, output_dir)
         
         exit(0)
 
@@ -60,7 +61,8 @@ def get_model_response(entry, initial = False):
     test_method_code = entry['method_code']
     test_method_name = entry['method_name']
     globals_code = '\n'.join(entry['global_vars'].values())
-    err_class_code = f"{entry['before']}\n{entry['after']}\n{globals_code}\n{test_method_code}"
+    parts = [entry['before'], entry['after'], globals_code, test_method_code]
+    err_class_code = '\n'.join(filter(None, parts))
     
     if initial:
         err_msg = entry['initial_err_msg']
@@ -120,28 +122,30 @@ def prompt_model(prompt, model_name='gpt-4o-mini'):
         response = f'{e}'
     return response
         
-def repair_single_entry(entry, clone_dir, iter_max = 5):
+def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
     """entry(['Project URL', 'SHA Detected', 'Module Path', 'Fully-Qualified Test Name (packageName.ClassName.methodName)', 'Category', 
     'Status', 'PR Link', 'Notes', None, 'start', 'end', 'method_name', 'method_code', 'node.annotations', 'before', 'after', 'earlist_line', 'helper_method_names', 'repo_name','test_file_path', 'global_vars'])"""
     
     # initial run check with nondex 
     print(f"* Process single entry...")
+    fixed = False
     repo_path = entry['repo_path']
     git_stash(repo_path)
+    test_full_name = entry['Fully-Qualified Test Name (packageName.ClassName.methodName)']
+    result_json = os.path.join(output_dir, f'{test_full_name}.json')
     initial_summary, initial_err_msg, initial_err_code, initial_err_method_names = extract_nondex_result(entry, clone_dir)
     if initial_summary == "PASS":
-        entry.update({'repair_result': 'Initial run with no failures!'})
+        entry.update({'initial_summary': 'Initial run with no failures!', 'result_json': result_json})
     elif initial_summary == 'FAILURE':
-        # print(initial_summary, initial_err_msg, initial_err_code)
         entry.update({
             'initial_summary': initial_summary,
             'initial_err_msg': initial_err_msg,
             'initial_err_code': initial_err_code,
-            'initial_err_method_names': initial_err_method_names
+            'initial_err_method_names': initial_err_method_names,
+            'result_json': result_json
         })
         current_iter = 0
         initial = True
-        # print(entry.keys())
         while current_iter < iter_max:
             if current_iter == 0:
                 initial = True  
@@ -152,7 +156,7 @@ def repair_single_entry(entry, clone_dir, iter_max = 5):
             updated_class = apply_patch(entry, patch)
             if updated_class!= None:
                 summary, err_msg, err_code, err_method_names = extract_nondex_result(entry, clone_dir)
-                print('New:', summary, err_msg, err_code, err_method_names)
+                print(f'Current Result:\n{summary}\n{err_msg}\n{err_code}\n{err_method_names}')
                 new_res = {
                     'prev_summary': summary,
                     'prev_err_msg': err_msg,
@@ -161,24 +165,42 @@ def repair_single_entry(entry, clone_dir, iter_max = 5):
                 }
                 entry.update(new_res)
                 entry['intermediate_log'] = {}
-                entry['intermediate_log'][current_iter] = new_res
+                new_helper_methods, new_global_vars = get_realted_helper(entry['test_file_path'])
+                new_method = locate_test_code(entry['test_file_path'], entry['Fully-Qualified Test Name (packageName.ClassName.methodName)'])
+                new_info = {
+                    'method_code': new_method,
+                    'global_vars': new_global_vars,
+                }
+                new_info.update(new_helper_methods)
+                if current_iter not in entry['intermediate_log']:
+                    entry['intermediate_log'][current_iter] = {'result': new_res, 'related code':new_info, 'patch': patch, 'prompt': prompt, 'response': response}
+                entry.update(new_info)
+                
+                if summary == 'PASS':
+                    fixed = True
+                    break
+                
             current_iter += 1
-
-    
-    
-    # prompt
-    
-    
-    # restore repo code
-    
-
-
+            
+    with open(entry['result_json'], "w", encoding="utf-8") as f:
+        json.dump(make_serializable(entry), f, indent=4) 
+        
+def make_serializable(obj):
+    if isinstance(obj, dict):
+        return {k: make_serializable(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [make_serializable(item) for item in obj]
+    try:
+        json.dumps(obj)
+        return obj
+    except (TypeError, OverflowError):
+        return str(obj)
 
 def main(args):
     input_csv, clone_dir, output_dir = args.input_csv, args.clone_dir, args.output_dir
-    entries = process_input_csv(input_csv, clone_dir)
+    os.makedirs(output_dir, exist_ok=True)
+    entries = process_input_csv(input_csv, clone_dir, output_dir)
     
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
