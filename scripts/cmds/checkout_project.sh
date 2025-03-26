@@ -6,5 +6,5 @@ file_path=$4
 mainDir=${cloneDir}
 
 cd ${mainDir}/${sha}/${project}
-echo "git checkout" ${file_path}
+echo "* Git checkout" ${file_path}
 git checkout ${file_path}

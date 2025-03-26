@@ -166,7 +166,7 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
             updated_class = apply_patch(entry, patch)
             if updated_class!= None:
                 summary, err_msg, err_code, err_method_names = extract_nondex_result(entry, clone_dir)
-                print(f'* Current Result:\n{summary}\n{err_msg}\n{err_code}\n{err_method_names}')
+                print(f'* ===========Current Result Start==============\n{summary}\n{err_msg}\n{err_code}\n{err_method_names}\n===========Current Result End==============\n')
                 new_res = {
                     'prev_summary': summary,
                     'prev_err_msg': err_msg,
