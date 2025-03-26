@@ -1,0 +1,75 @@
+++ cat example/input_modeule.csv
++ for info in $(cat $input)
+++ echo https://github.com/apache/nifi,2bd752d868a8f3e36113b078bb576cf054e945e8,nifi-commons/nifi-record
+++ cut -d, -f1
++ url=https://github.com/apache/nifi
+++ echo https://github.com/apache/nifi,2bd752d868a8f3e36113b078bb576cf054e945e8,nifi-commons/nifi-record
+++ cut -d, -f2
++ sha=2bd752d868a8f3e36113b078bb576cf054e945e8
+++ echo https://github.com/apache/nifi,2bd752d868a8f3e36113b078bb576cf054e945e8,nifi-commons/nifi-record
+++ cut -d, -f3
++ module=nifi-commons/nifi-record
++ project=nifi
++ cd /home/yang/new/NODoctor/clone
++ mkdir -p 2bd752d868a8f3e36113b078bb576cf054e945e8
++ cd 2bd752d868a8f3e36113b078bb576cf054e945e8
++ git clone https://github.com/apache/nifi
+Cloning into 'nifi'...
++ cd nifi
++ git checkout 2bd752d868a8f3e36113b078bb576cf054e945e8
+Note: switching to '2bd752d868a8f3e36113b078bb576cf054e945e8'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 2bd752d868 NIFI-9202 Improve Allowable Values merging to handle cases when different nodes have different set of Allowable Values.
++ cd ../../..
++ for info in $(cat $input)
+++ echo https://github.com/alibaba/fastjson,93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282,.
+++ cut -d, -f1
++ url=https://github.com/alibaba/fastjson
+++ echo https://github.com/alibaba/fastjson,93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282,.
+++ cut -d, -f2
++ sha=93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282
+++ echo https://github.com/alibaba/fastjson,93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282,.
+++ cut -d, -f3
++ module=.
++ project=fastjson
++ cd /home/yang/new/NODoctor/clone
++ mkdir -p 93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282
++ cd 93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282
++ git clone https://github.com/alibaba/fastjson
+Cloning into 'fastjson'...
++ cd fastjson
++ git checkout 93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282
+Note: switching to '93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 93d8c01e9 Merge pull request #3875 from YunLemon/Modify_Travis_1
++ cd ../../..

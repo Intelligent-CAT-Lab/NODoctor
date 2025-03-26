@@ -46,4 +46,6 @@ https://github.com/apache/nifi,2bd752d868a8f3e36113b078bb576cf054e945e8,nifi-com
 https://github.com/alibaba/fastjson,93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282,.,com.alibaba.json.bvt.GroovyTest.test_groovy,NOD,RepoArchived,,
 ```
 - `CloneDIR`: the directory where all Java projects are located
-- `ResultDir`: the directory to save all results. Each run of the experiments will generate a directory with a unique SHA as the folder name, under the folder there are patches, detailed result information, and all logs
+- `ResultDir`: the directory to save all results. Each run of the experiments will generate a directory with a unique SHA as the folder name, under the folder there are patches, detailed result information, and all logs.
+Each test generates a detailed JSON file located at `${unique SHA}/${project name}/${project sha}/${test name}.json`, if a correct patch is produced, you can find it under the `final_patch` field.
+- Example logs and results for the two tests mentioned above can be found [here](example/example_logs/), please note that due to the non-deterministic nature of these tests, their failures may not be consistently reproducible.

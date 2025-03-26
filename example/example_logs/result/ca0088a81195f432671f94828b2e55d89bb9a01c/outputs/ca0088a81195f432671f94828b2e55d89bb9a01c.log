@@ -1,0 +1,872 @@
++ FixScript=scripts/NODRepair.py
++ echo '* CURRENT DIR '
+* CURRENT DIR 
++ echo '* Running with scripts/NODRepair.py example/input_test.csv clone result/ca0088a81195f432671f94828b2e55d89bb9a01c/outputs |&tee result/ca0088a81195f432671f94828b2e55d89bb9a01c/outputs/main.log'
+* Running with scripts/NODRepair.py example/input_test.csv clone result/ca0088a81195f432671f94828b2e55d89bb9a01c/outputs |&tee result/ca0088a81195f432671f94828b2e55d89bb9a01c/outputs/main.log
++ python3 scripts/NODRepair.py --input_csv example/input_test.csv --clone_dir clone --output_dir result/ca0088a81195f432671f94828b2e55d89bb9a01c/outputs
++ tee result/ca0088a81195f432671f94828b2e55d89bb9a01c/outputs/main.log
+restore original code version
+* clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi does exist.
+* Git stash
+Saved working directory and index state WIP on (no branch): 2bd752d868 NIFI-9202 Improve Allowable Values merging to handle cases when different nodes have different set of Allowable Values.
+
+* Working on test org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys at 2025-03-26 00:07:07...
+* ======================Full log of nondex starts =================
+* RUNNING NonDex on ID test org.apache.nifi.serialization.record.TestDataTypeUtils#testInferTypeWithMapNonStringKeys STARTING at Wed Mar 26 12:07:07 AM CDT 2025
+* REPO VERSION 9cf96db6984ad8ceeecbae8b03fd7325a9294144
+* CURRENT DIR /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi
+* Expected Java version 8
+Java version 8
+* mvn edu.illinois:nondex-maven-plugin:2.2.1:nondex -pl nifi-commons/nifi-record -Dtest=org.apache.nifi.serialization.record.TestDataTypeUtils#testInferTypeWithMapNonStringKeys -Dbasepom.check.skip-prettier -Dgpg.skip -Dfindbugs.skip=true -Drat.skip -Dcheckstyle.skip -Denforcer.skip=true -Dspotbugs.skip -Dmaven.test.failure.ignore=true -Djacoco.skip -Danimal.sniffer.skip -Dmaven.antrun.skip -Dfmt.skip -Dskip.npm -Dlicense.skipCheckLicense -Dlicense.skipAddThirdParty=true -Dfindbugs.skip -Dlicense.skip -Dskip.npm -Dskip.yarn -Dskip.bower -Dskip.grunt -Dskip.gulp -Dskip.jspm -Dskip.karma -Dskip.webpack -DskipDockerBuild -DskipDockerTag -DskipDockerPush -DskipDocker -Denforcer.skip -DnondexRuns=4 -Dstyle.color=never -Ddependency-check.skip -Dspotless.check.skip
+[INFO] Scanning for projects...
+[INFO] Inspecting build with total of 1 modules...
+[INFO] Installing Nexus Staging features:
+[INFO]   ... total of 1 executions of maven-deploy-plugin replaced with nexus-staging-maven-plugin
+[INFO] 
+[INFO] --------------------< org.apache.nifi:nifi-record >---------------------
+[INFO] Building nifi-record 1.15.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> nondex:2.2.1:nondex (default-cli) > test-compile @ nifi-record >>>
+[INFO] 
+[INFO] --- enforcer:3.0.0:enforce (enforce-maven-version) @ nifi-record ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- enforcer:3.0.0:enforce (enforce-maven) @ nifi-record ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- enforcer:3.0.0:enforce (enforce-no-snapshots) @ nifi-record ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- enforcer:3.0.0:enforce (enforce-banned-dependencies) @ nifi-record ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- remote-resources:1.7.0:process (process-resource-bundles) @ nifi-record ---
+[INFO] Preparing remote bundle org.apache:apache-jar-resource-bundle:1.4
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ nifi-record ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/src/main/resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.8.1:compile (default-compile) @ nifi-record ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ nifi-record ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/src/test/resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.8.1:testCompile (default-testCompile) @ nifi-record ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 4 source files to /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/target/test-classes
+[INFO] 
+[INFO] --- compiler:3.8.1:testCompile (groovy-tests) @ nifi-record ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< nondex:2.2.1:nondex (default-cli) < test-compile @ nifi-record <<<
+[INFO] 
+[INFO] 
+[INFO] --- nondex:2.2.1:nondex (default-cli) @ nifi-record ---
+INFO: The original argline is: 
+INFO: Adding NonDex argLine to existing argLine specified by the project
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=933178
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexJarDir=.nondex
+nondexExecid=clean_Vf6IRGhHnWXNHridMoVKHLt4JO6dMYokdtCvzKyuXkU=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.089 s - in org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+INFO: Adding excluded groups to newly created one
+INFO: Adding NonDex argLine to existing argLine specified by the project
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=933178
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexExecid=U9pFOj6Y8EX0zB7MXuO9OEYieWRtW+S4p8bPAjyyOzI=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.nifi.serialization.record.TestDataTypeUtils
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.049 s <<< FAILURE! - in org.apache.nifi.serialization.record.TestDataTypeUtils
+[ERROR] org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys  Time elapsed: 0.027 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: org.apache.nifi.serialization.record.type.RecordDataType@5dd6264<RECORD> but was: org.apache.nifi.serialization.record.type.RecordDataType@1ffe63b9<RECORD>
+	at org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys(TestDataTypeUtils.java:639)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   TestDataTypeUtils.testInferTypeWithMapNonStringKeys:639 expected: org.apache.nifi.serialization.record.type.RecordDataType@5dd6264<RECORD> but was: org.apache.nifi.serialization.record.type.RecordDataType@1ffe63b9<RECORD>
+[INFO] 
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[ERROR] There are test failures.
+
+Please refer to /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex/U9pFOj6Y8EX0zB7MXuO9OEYieWRtW+S4p8bPAjyyOzI= for the individual test results.
+Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+INFO: Adding excluded groups to newly created one
+INFO: Adding NonDex argLine to existing argLine specified by the project
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=974622
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexExecid=6+9yNo5QS8zenXqu3jxDy+NHQTrcTGoVVD8iSwVRw4=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.nifi.serialization.record.TestDataTypeUtils
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.056 s <<< FAILURE! - in org.apache.nifi.serialization.record.TestDataTypeUtils
+[ERROR] org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys  Time elapsed: 0.028 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: org.apache.nifi.serialization.record.type.RecordDataType@5dd6264<RECORD> but was: org.apache.nifi.serialization.record.type.RecordDataType@1ffe63b9<RECORD>
+	at org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys(TestDataTypeUtils.java:639)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   TestDataTypeUtils.testInferTypeWithMapNonStringKeys:639 expected: org.apache.nifi.serialization.record.type.RecordDataType@5dd6264<RECORD> but was: org.apache.nifi.serialization.record.type.RecordDataType@1ffe63b9<RECORD>
+[INFO] 
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[ERROR] There are test failures.
+
+Please refer to /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex/6+9yNo5QS8zenXqu3jxDy+NHQTrcTGoVVD8iSwVRw4= for the individual test results.
+Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+INFO: Adding excluded groups to newly created one
+INFO: Adding NonDex argLine to existing argLine specified by the project
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=1016066
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexExecid=BR1424YQrYDXANmifomxqKUaNyJVvyYUGCV51tcK6cU=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.nifi.serialization.record.TestDataTypeUtils
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.068 s <<< FAILURE! - in org.apache.nifi.serialization.record.TestDataTypeUtils
+[ERROR] org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys  Time elapsed: 0.029 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: org.apache.nifi.serialization.record.type.RecordDataType@5dd6264<RECORD> but was: org.apache.nifi.serialization.record.type.RecordDataType@1ffe63b9<RECORD>
+	at org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys(TestDataTypeUtils.java:639)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   TestDataTypeUtils.testInferTypeWithMapNonStringKeys:639 expected: org.apache.nifi.serialization.record.type.RecordDataType@5dd6264<RECORD> but was: org.apache.nifi.serialization.record.type.RecordDataType@1ffe63b9<RECORD>
+[INFO] 
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[ERROR] There are test failures.
+
+Please refer to /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex/BR1424YQrYDXANmifomxqKUaNyJVvyYUGCV51tcK6cU= for the individual test results.
+Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+INFO: Adding excluded groups to newly created one
+INFO: Adding NonDex argLine to existing argLine specified by the project
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=1057510
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexExecid=DV8yJmEwwt5kPvW7ztXjMs3aO3Ju5V+DjjQSlkkrPI=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.nifi.serialization.record.TestDataTypeUtils
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.05 s <<< FAILURE! - in org.apache.nifi.serialization.record.TestDataTypeUtils
+[ERROR] org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys  Time elapsed: 0.028 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: org.apache.nifi.serialization.record.type.RecordDataType@5dd6264<RECORD> but was: org.apache.nifi.serialization.record.type.RecordDataType@1ffe63b9<RECORD>
+	at org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys(TestDataTypeUtils.java:639)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   TestDataTypeUtils.testInferTypeWithMapNonStringKeys:639 expected: org.apache.nifi.serialization.record.type.RecordDataType@5dd6264<RECORD> but was: org.apache.nifi.serialization.record.type.RecordDataType@1ffe63b9<RECORD>
+[INFO] 
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[ERROR] There are test failures.
+
+Please refer to /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex/DV8yJmEwwt5kPvW7ztXjMs3aO3Ju5V+DjjQSlkkrPI= for the individual test results.
+Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[INFO] NonDex SUMMARY:
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=933178 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexExecid=U9pFOj6Y8EX0zB7MXuO9OEYieWRtW+S4p8bPAjyyOzI= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=974622 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexExecid=6+9yNo5QS8zenXqu3jxDy+NHQTrcTGoVVD8iSwVRw4= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=1016066 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexExecid=BR1424YQrYDXANmifomxqKUaNyJVvyYUGCV51tcK6cU= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=1057510 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexExecid=DV8yJmEwwt5kPvW7ztXjMs3aO3Ju5V+DjjQSlkkrPI= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] All tests pass without NonDex shuffling
+[INFO] ####################
+[INFO] Across all seeds:
+[INFO] Test results can be found at: 
+[INFO] file:///home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex/U9pFOj6Y8EX0zB7MXuO9OEYieWRtW+S4p8bPAjyyOzI=/test_results.html
+[INFO] [NonDex] The id of this run is: U9pFOj6Y8EX0zB7MXuO9OEYieWRtW+S4p8bPAjyyOzI=
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  9.727 s
+[INFO] Finished at: 2025-03-26T00:07:18-05:00
+[INFO] ------------------------------------------------------------------------
+* RUNNING NonDex on ID test org.apache.nifi.serialization.record.TestDataTypeUtils#testInferTypeWithMapNonStringKeys ENDING at Wed Mar 26 12:07:18 AM CDT 2025 
+
+* ======================Full log of nondex ends =================
+* Prompt:
+You are a software testing expert. I'm going to ask you to fix a flaky test.
+     Flaky tests non-deterministically pass or fail due to concurrency, timeout, platform dependency, timezone dependency, etc.
+     You should think about the solution step by step, print all code between //<fix start> and //<fix end>, but do not print any other text in the response.
+     Problem definition: testInferTypeWithMapNonStringKeys is the flaky test you need to fix, located in the following code of a java class:
+     private static final ZoneId SYSTEM_DEFAULT_ZONE_ID = ZoneOffset.systemDefault();
+
+    private static final String ISO_8601_YEAR_MONTH_DAY = "2000-01-01";
+
+    private static final String CUSTOM_MONTH_DAY_YEAR = "01-01-2000";
+
+    private static final String CUSTOM_MONTH_DAY_YEAR_PATTERN = "MM-dd-yyyy";
+
+    private static final String DATE_FIELD = "date";
+
+public void testInferTypeWithMapNonStringKeys() throws InterruptedException {
+    Map<Integer, String> map = new HashMap<>();
+    map.put(1, "Hello");
+    map.put(2, "World");
+
+    RecordDataType expected = (RecordDataType)RecordFieldType.RECORD.getRecordDataType(new SimpleRecordSchema(Arrays.asList(
+            new RecordField("1", RecordFieldType.STRING.getDataType()),
+            new RecordField("2", RecordFieldType.STRING.getDataType())
+    )));
+
+    CountDownLatch latch = new CountDownLatch(1);
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    
+    executor.submit(() -> {
+        try {
+            DataType actual = DataTypeUtils.inferDataType(new HashMap<>(map), null);
+            assertEquals(expected, actual);
+        } finally {
+            latch.countDown(); // Ensure the latch is counted down
+        }
+    });
+
+    latch.await(1000, TimeUnit.MILLISECONDS); // Wait for the completion of the assertion
+    executor.shutdown(); // Gracefully shut down the executor
+}
+
+     When the test fails, I get the following error:
+ org.opentest4j.AssertionFailedError
+ The error is caused by 'assertEquals(expected, actual);' in method ['testInferTypeWithMapNonStringKeys'].
+    You should follow the rules below for fixing the code:
+     - Do not expect me to modify or replace anything in the code.
+     - Print all text which is out of code starting with "//". 
+     - Do not delete methods.
+     - Do not change signatures and modifiers of all methods. 
+     - Fix the flakiness by modifying the provided code. You may make changes to all methods in the class. But do not add code out of methods. 
+     - Print all code between //<fix start> and //<fix end>.
+     - Update dependencies in pom.xml if needed, put the code between ```xml and ```.  Provide a specific version for the dependency you add. Do not add existing dependencies. Do not include my artifact in your pom.xml code.
+     - Your code should be compilable without any errors.
+     - Make sure all the arguments are correct.
+     - Use compatible types for all variables.
+     - Do not define or write helper methods out of the test, make sure all methods you want to call are inside the test method.
+     - Update import list if needed, put the code between //<import start> and //<import end>. 
+     - Assume required classes for original code are setup correctly and do not include them in your code. 
+ 
+* Response:
+```java
+//<import start>
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+//<import end>
+
+//<fix start>
+public void testInferTypeWithMapNonStringKeys() throws InterruptedException {
+    Map<Integer, String> map = new HashMap<>();
+    map.put(1, "Hello");
+    map.put(2, "World");
+
+    RecordDataType expected = (RecordDataType)RecordFieldType.RECORD.getRecordDataType(new SimpleRecordSchema(Arrays.asList(
+            new RecordField("1", RecordFieldType.STRING.getDataType()),
+            new RecordField("2", RecordFieldType.STRING.getDataType())
+    )));
+
+    CountDownLatch latch = new CountDownLatch(1);
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    
+    executor.submit(() -> {
+        try {
+            DataType actual = DataTypeUtils.inferDataType(new HashMap<>(map), null);
+            synchronized (this) { // Synchronize to avoid simultaneous access
+                assertEquals(expected, actual);
+            }
+        } finally {
+            latch.countDown(); // Ensure the latch is counted down
+        }
+    });
+
+    latch.await(1000, TimeUnit.MILLISECONDS); // Wait for the completion of the assertion
+    executor.shutdown(); // Gracefully shut down the executor
+}
+//<fix end>
+```
+
+```xml
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>5.9.1</version>
+</dependency>
+```
+Will add import java.util.concurrent.CountDownLatch;
+Will add import java.util.concurrent.ExecutorService;
+Will add import java.util.concurrent.Executors;
+Will add import java.util.concurrent.TimeUnit;
+* ==================================Current Patch Start==================================
+
+test_code:
+public void testInferTypeWithMapNonStringKeys() throws InterruptedException {
+    Map<Integer, String> map = new HashMap<>();
+    map.put(1, "Hello");
+    map.put(2, "World");
+
+    RecordDataType expected = (RecordDataType)RecordFieldType.RECORD.getRecordDataType(new SimpleRecordSchema(Arrays.asList(
+            new RecordField("1", RecordFieldType.STRING.getDataType()),
+            new RecordField("2", RecordFieldType.STRING.getDataType())
+    )));
+
+    CountDownLatch latch = new CountDownLatch(1);
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    
+    executor.submit(() -> {
+        try {
+            DataType actual = DataTypeUtils.inferDataType(new HashMap<>(map), null);
+            synchronized (this) { // Synchronize to avoid simultaneous access
+                assertEquals(expected, actual);
+            }
+        } finally {
+            latch.countDown(); // Ensure the latch is counted down
+        }
+    });
+
+    latch.await(1000, TimeUnit.MILLISECONDS); // Wait for the completion of the assertion
+    executor.shutdown(); // Gracefully shut down the executor
+}
+
+import:
+['import java.util.concurrent.CountDownLatch;', 'import java.util.concurrent.ExecutorService;', 'import java.util.concurrent.Executors;', 'import java.util.concurrent.TimeUnit;']
+pom:
+
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>5.9.1</version>
+</dependency>
+
+* ==================================Current Patch End==================================
+
+* Applying Patch
+Code Replaced.
+Working on pom.xml: clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/pom.xml
+* Git checkout clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/pom.xml in clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi
+* * Git checkout
+Your branch is up to date with 'origin/main'.
+
+junit-jupiter  will be potentially added
+clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/pom.xml
+POM checking done.
+* ======================Full log of nondex starts =================
+* RUNNING NonDex on ID test org.apache.nifi.serialization.record.TestDataTypeUtils#testInferTypeWithMapNonStringKeys STARTING at Wed Mar 26 12:07:24 AM CDT 2025
+* REPO VERSION 9cf96db6984ad8ceeecbae8b03fd7325a9294144
+* CURRENT DIR /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi
+* Expected Java version 8
+Java version 8
+* mvn edu.illinois:nondex-maven-plugin:2.2.1:nondex -pl nifi-commons/nifi-record -Dtest=org.apache.nifi.serialization.record.TestDataTypeUtils#testInferTypeWithMapNonStringKeys -Dbasepom.check.skip-prettier -Dgpg.skip -Dfindbugs.skip=true -Drat.skip -Dcheckstyle.skip -Denforcer.skip=true -Dspotbugs.skip -Dmaven.test.failure.ignore=true -Djacoco.skip -Danimal.sniffer.skip -Dmaven.antrun.skip -Dfmt.skip -Dskip.npm -Dlicense.skipCheckLicense -Dlicense.skipAddThirdParty=true -Dfindbugs.skip -Dlicense.skip -Dskip.npm -Dskip.yarn -Dskip.bower -Dskip.grunt -Dskip.gulp -Dskip.jspm -Dskip.karma -Dskip.webpack -DskipDockerBuild -DskipDockerTag -DskipDockerPush -DskipDocker -Denforcer.skip -DnondexRuns=4 -Dstyle.color=never -Ddependency-check.skip -Dspotless.check.skip
+[INFO] Scanning for projects...
+[INFO] Inspecting build with total of 1 modules...
+[INFO] Installing Nexus Staging features:
+[INFO]   ... total of 1 executions of maven-deploy-plugin replaced with nexus-staging-maven-plugin
+[INFO] 
+[INFO] --------------------< org.apache.nifi:nifi-record >---------------------
+[INFO] Building nifi-record 1.15.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> nondex:2.2.1:nondex (default-cli) > test-compile @ nifi-record >>>
+[INFO] 
+[INFO] --- enforcer:3.0.0:enforce (enforce-maven-version) @ nifi-record ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- enforcer:3.0.0:enforce (enforce-maven) @ nifi-record ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- enforcer:3.0.0:enforce (enforce-no-snapshots) @ nifi-record ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- enforcer:3.0.0:enforce (enforce-banned-dependencies) @ nifi-record ---
+[INFO] Skipping Rule Enforcement.
+[INFO] 
+[INFO] --- remote-resources:1.7.0:process (process-resource-bundles) @ nifi-record ---
+[INFO] Preparing remote bundle org.apache:apache-jar-resource-bundle:1.4
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ nifi-record ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/src/main/resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.8.1:compile (default-compile) @ nifi-record ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ nifi-record ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/src/test/resources
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- compiler:3.8.1:testCompile (default-testCompile) @ nifi-record ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 4 source files to /home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/target/test-classes
+[INFO] 
+[INFO] --- compiler:3.8.1:testCompile (groovy-tests) @ nifi-record ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< nondex:2.2.1:nondex (default-cli) < test-compile @ nifi-record <<<
+[INFO] 
+[INFO] 
+[INFO] --- nondex:2.2.1:nondex (default-cli) @ nifi-record ---
+INFO: The original argline is: 
+INFO: Adding NonDex argLine to existing argLine specified by the project
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=933178
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexJarDir=.nondex
+nondexExecid=clean_4RspeQyKnjgSVV3nVcBxcubgn8ijaOi4Uln1TCsfIiM=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.063 s - in org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+INFO: Adding excluded groups to newly created one
+INFO: Adding NonDex argLine to existing argLine specified by the project
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=933178
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexExecid=kEDWhV8FqzwSqgKbUCOV4ecTNvLfwXFq6pcMCHrG8Hg=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.067 s - in org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+INFO: Adding excluded groups to newly created one
+INFO: Adding NonDex argLine to existing argLine specified by the project
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=974622
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexExecid=6OK+QYKYjbTamHAVzyhuUvOQ91w+TZj9lwnJzzfQNo=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.064 s - in org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+INFO: Adding excluded groups to newly created one
+INFO: Adding NonDex argLine to existing argLine specified by the project
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=1016066
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexExecid=5zsP5gNaw1ph0TNQlc8YftZHG0a7F3mhTGdyka+9r5s=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.075 s - in org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+INFO: Adding excluded groups to newly created one
+INFO: Adding NonDex argLine to existing argLine specified by the project
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=1057510
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex
+nondexExecid=7oDp8Z1jRBebS2I7hv+hiqKY5TGcwPNMdhSKH4KxLA=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.074 s - in org.apache.nifi.serialization.record.TestDataTypeUtils
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] NonDex SUMMARY:
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=933178 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexExecid=kEDWhV8FqzwSqgKbUCOV4ecTNvLfwXFq6pcMCHrG8Hg= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=974622 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexExecid=6OK+QYKYjbTamHAVzyhuUvOQ91w+TZj9lwnJzzfQNo= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=1016066 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexExecid=5zsP5gNaw1ph0TNQlc8YftZHG0a7F3mhTGdyka+9r5s= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=1057510 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex" -DnondexExecid=7oDp8Z1jRBebS2I7hv+hiqKY5TGcwPNMdhSKH4KxLA= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] All tests pass without NonDex shuffling
+[INFO] ####################
+[INFO] Across all seeds:
+[INFO] Test results can be found at: 
+[INFO] file:///home/yang/new/NODoctor/clone/2bd752d868a8f3e36113b078bb576cf054e945e8/nifi/nifi-commons/nifi-record/.nondex/kEDWhV8FqzwSqgKbUCOV4ecTNvLfwXFq6pcMCHrG8Hg=/test_results.html
+[INFO] [NonDex] The id of this run is: kEDWhV8FqzwSqgKbUCOV4ecTNvLfwXFq6pcMCHrG8Hg=
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  9.820 s
+[INFO] Finished at: 2025-03-26T00:07:35-05:00
+[INFO] ------------------------------------------------------------------------
+* RUNNING NonDex on ID test org.apache.nifi.serialization.record.TestDataTypeUtils#testInferTypeWithMapNonStringKeys ENDING at Wed Mar 26 12:07:36 AM CDT 2025 
+
+* ======================Full log of nondex ends =================
+* ===========Current Result Start==============
+PASS
+
+
+[]
+===========Current Result End==============
+
+* End on test org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys at 2025-03-26 00:07:36...
+restore original code version
+* clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson does exist.
+* Git stash
+No local changes to save
+
+* Working on test com.alibaba.json.bvt.GroovyTest.test_groovy at 2025-03-26 00:07:36...
+* ======================Full log of nondex starts =================
+* RUNNING NonDex on ID test com.alibaba.json.bvt.GroovyTest#test_groovy STARTING at Wed Mar 26 12:07:36 AM CDT 2025
+* REPO VERSION 9cf96db6984ad8ceeecbae8b03fd7325a9294144
+* CURRENT DIR /home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson
+* Expected Java version 8
+Java version 8
+* mvn edu.illinois:nondex-maven-plugin:2.2.1:nondex -pl . -Dtest=com.alibaba.json.bvt.GroovyTest#test_groovy -Dbasepom.check.skip-prettier -Dgpg.skip -Dfindbugs.skip=true -Drat.skip -Dcheckstyle.skip -Denforcer.skip=true -Dspotbugs.skip -Dmaven.test.failure.ignore=true -Djacoco.skip -Danimal.sniffer.skip -Dmaven.antrun.skip -Dfmt.skip -Dskip.npm -Dlicense.skipCheckLicense -Dlicense.skipAddThirdParty=true -Dfindbugs.skip -Dlicense.skip -Dskip.npm -Dskip.yarn -Dskip.bower -Dskip.grunt -Dskip.gulp -Dskip.jspm -Dskip.karma -Dskip.webpack -DskipDockerBuild -DskipDockerTag -DskipDockerPush -DskipDocker -Denforcer.skip -DnondexRuns=4 -Dstyle.color=never -Ddependency-check.skip -Dspotless.check.skip
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< com.alibaba:fastjson >------------------------
+[INFO] Building fastjson 1.2.77_preview_01
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> nondex:2.2.1:nondex (default-cli) > test-compile @ fastjson >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ fastjson ---
+[INFO] Copying 6 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.8.0:compile (default-compile) @ fastjson ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ fastjson ---
+[INFO] Copying 98 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.8.0:testCompile (default-testCompile) @ fastjson ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< nondex:2.2.1:nondex (default-cli) < test-compile @ fastjson <<<
+[INFO] 
+[INFO] 
+[INFO] --- nondex:2.2.1:nondex (default-cli) @ fastjson ---
+INFO: The original argline is: 
+INFO: Creating new argline for Surefire
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=933178
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex
+nondexJarDir=.nondex
+nondexExecid=clean_1uAoCP1nglH2HcaHhQ8QM30wD3nEe8AbkAJRb1RnRCM=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.alibaba.json.bvt.GroovyTest
+A@4218d6a3
+{
+	"id":0,
+	"name":"jobs"
+}
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.369 s - in com.alibaba.json.bvt.GroovyTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+INFO: Adding excluded groups to newly created one
+INFO: Creating new argline for Surefire
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=933178
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex
+nondexExecid=pBucAMnVXKXTDkcVxYPzC21pByFPbD4td6RSX+rMIE4=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.alibaba.json.bvt.GroovyTest
+A@ae13544
+{
+	"id":0,
+	"name":"jobs"
+}
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.331 s - in com.alibaba.json.bvt.GroovyTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+INFO: Adding excluded groups to newly created one
+INFO: Creating new argline for Surefire
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=974622
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex
+nondexExecid=8ouzP7dOin32FbMgOqP8RAG6LCDHMQDb3m82MeedafM=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.alibaba.json.bvt.GroovyTest
+A@ae13544
+{
+	"id":0,
+	"name":"jobs"
+}
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.41 s - in com.alibaba.json.bvt.GroovyTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+INFO: Adding excluded groups to newly created one
+INFO: Creating new argline for Surefire
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=1016066
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex
+nondexExecid=DhLZ9qhgJ+a1oXoF9KdBerJYRRbr29ETzxZKIul1LWY=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.alibaba.json.bvt.GroovyTest
+A@ae13544
+{
+	"id":0,
+	"name":"jobs"
+}
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.44 s - in com.alibaba.json.bvt.GroovyTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+INFO: Adding excluded groups to newly created one
+INFO: Creating new argline for Surefire
+CONFIG: nondexFilter=.*
+nondexMode=FULL
+nondexSeed=1057510
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex
+nondexJarDir=/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex
+nondexExecid=FLP5tQfMkvvqWdYbv50ShJwbPqDR6dBdgi3CtowkTxg=
+nondexLogging=CONFIG
+test=
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.alibaba.json.bvt.GroovyTest
+A@ae13544
+{
+	"id":0,
+	"name":"jobs"
+}
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.357 s - in com.alibaba.json.bvt.GroovyTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] NonDex SUMMARY:
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=933178 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex" -DnondexExecid=pBucAMnVXKXTDkcVxYPzC21pByFPbD4td6RSX+rMIE4= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=974622 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex" -DnondexExecid=8ouzP7dOin32FbMgOqP8RAG6LCDHMQDb3m82MeedafM= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=1016066 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex" -DnondexExecid=DhLZ9qhgJ+a1oXoF9KdBerJYRRbr29ETzxZKIul1LWY= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] *********
+[INFO] mvn nondex:nondex  -DnondexFilter='.*' -DnondexMode=FULL -DnondexSeed=1057510 -DnondexStart=0 -DnondexEnd=9223372036854775807 -DnondexPrintstack=false -DnondexDir="/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex" -DnondexJarDir="/home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex" -DnondexExecid=FLP5tQfMkvvqWdYbv50ShJwbPqDR6dBdgi3CtowkTxg= -DnondexLogging=CONFIG
+[INFO] No Test Failed with this configuration.
+[INFO] *********
+[INFO] All tests pass without NonDex shuffling
+[INFO] ####################
+[INFO] Across all seeds:
+[INFO] Test results can be found at: 
+[INFO] file:///home/yang/new/NODoctor/clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/.nondex/pBucAMnVXKXTDkcVxYPzC21pByFPbD4td6RSX+rMIE4=/test_results.html
+[INFO] [NonDex] The id of this run is: pBucAMnVXKXTDkcVxYPzC21pByFPbD4td6RSX+rMIE4=
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.771 s
+[INFO] Finished at: 2025-03-26T00:07:43-05:00
+[INFO] ------------------------------------------------------------------------
+* RUNNING NonDex on ID test com.alibaba.json.bvt.GroovyTest#test_groovy ENDING at Wed Mar 26 12:07:43 AM CDT 2025 
+
+* ======================Full log of nondex ends =================
+* The original test did not fail, skip!
+* End on test com.alibaba.json.bvt.GroovyTest.test_groovy at 2025-03-26 00:07:43...
+++ date
++ echo '* ENDING' at Wed Mar 26 12:07:43 AM CDT 2025
+* ENDING at Wed Mar 26 12:07:43 AM CDT 2025

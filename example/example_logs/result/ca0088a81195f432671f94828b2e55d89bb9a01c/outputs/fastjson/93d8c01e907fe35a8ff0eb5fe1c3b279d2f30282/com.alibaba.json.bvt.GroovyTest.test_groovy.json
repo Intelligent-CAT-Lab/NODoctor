@@ -1,0 +1,34 @@
+{
+    "Project URL": "https://github.com/alibaba/fastjson",
+    "SHA Detected": "93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282",
+    "Module Path": ".",
+    "Fully-Qualified Test Name (packageName.ClassName.methodName)": "com.alibaba.json.bvt.GroovyTest.test_groovy",
+    "Category": "NOD",
+    "Status": "RepoArchived",
+    "PR Link": "",
+    "Notes": "",
+    "original_test_class_content": "package com.alibaba.json.bvt;\n\nimport groovy.lang.GroovyClassLoader;\nimport groovy.lang.GroovyObject;\nimport org.junit.Assert;\nimport junit.framework.TestCase;\n\nimport com.alibaba.fastjson.JSON;\n\npublic class GroovyTest extends TestCase {\n\n    public void test_groovy() throws Exception {\n        ClassLoader parent = Thread.currentThread().getContextClassLoader();\n        GroovyClassLoader loader = new GroovyClassLoader(parent);\n\n        // A\u7c7b\n        Class AClass = loader.parseClass(\"class A {\\n\" + //\n                                         \"    int id\\n\" + //\n                                         \"}\");\n\n        // A\u5b9e\u4f8b\n        GroovyObject a = (GroovyObject) AClass.newInstance();\n        a.setProperty(\"id\", 33);\n        String textA = JSON.toJSONString(a);\n        \n        GroovyObject aa = (GroovyObject) JSON.parseObject(textA, AClass);\n        Assert.assertEquals(a.getProperty(\"id\"), aa.getProperty(\"id\"));\n        \n        System.out.println(a);\n\n        // B\u7c7b\uff0c\u7ee7\u627f\u4e8eA\n        Class BClass = loader.parseClass(\"class B extends A {\\n\" + //\n        \t\t\"    String name\\n\" + //\n        \t\t\"}\");\n\n        // B\u5b9e\u4f8b\n        GroovyObject b = (GroovyObject) BClass.newInstance();\n        b.setProperty(\"name\", \"jobs\");\n        String textB = JSON.toJSONString(b);\n        GroovyObject bb = (GroovyObject) JSON.parseObject(textB, BClass);\n        Assert.assertEquals(b.getProperty(\"id\"), bb.getProperty(\"id\"));\n        Assert.assertEquals(b.getProperty(\"name\"), bb.getProperty(\"name\"));\n        \n\n        // \u5e8f\u5217\u5316\u5931\u8d25\n        System.out.println(JSON.toJSONString(b, true));\n    }\n}\n",
+    "repo_path": "clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson",
+    "start": [
+        12,
+        12
+    ],
+    "end": [
+        47,
+        5
+    ],
+    "method_name": "test_groovy",
+    "method_code": "    public void test_groovy() throws Exception {\n        ClassLoader parent = Thread.currentThread().getContextClassLoader();\n        GroovyClassLoader loader = new GroovyClassLoader(parent);\n\n        // A\u7c7b\n        Class AClass = loader.parseClass(\"class A {\\n\" + //\n                                         \"    int id\\n\" + //\n                                         \"}\");\n\n        // A\u5b9e\u4f8b\n        GroovyObject a = (GroovyObject) AClass.newInstance();\n        a.setProperty(\"id\", 33);\n        String textA = JSON.toJSONString(a);\n        \n        GroovyObject aa = (GroovyObject) JSON.parseObject(textA, AClass);\n        Assert.assertEquals(a.getProperty(\"id\"), aa.getProperty(\"id\"));\n        \n        System.out.println(a);\n\n        // B\u7c7b\uff0c\u7ee7\u627f\u4e8eA\n        Class BClass = loader.parseClass(\"class B extends A {\\n\" + //\n        \t\t\"    String name\\n\" + //\n        \t\t\"}\");\n\n        // B\u5b9e\u4f8b\n        GroovyObject b = (GroovyObject) BClass.newInstance();\n        b.setProperty(\"name\", \"jobs\");\n        String textB = JSON.toJSONString(b);\n        GroovyObject bb = (GroovyObject) JSON.parseObject(textB, BClass);\n        Assert.assertEquals(b.getProperty(\"id\"), bb.getProperty(\"id\"));\n        Assert.assertEquals(b.getProperty(\"name\"), bb.getProperty(\"name\"));\n        \n\n        // \u5e8f\u5217\u5316\u5931\u8d25\n        System.out.println(JSON.toJSONString(b, true));\n    }\n",
+    "node.annotations": [],
+    "before": {},
+    "after": {},
+    "earlist_line": 12,
+    "helper_method_names": [],
+    "repo_name": "fastjson",
+    "test_file_path": "clone/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/fastjson/src/test/java/com/alibaba/json/bvt/GroovyTest.java",
+    "global_vars": {},
+    "initial_summary": "Initial run with no failures!",
+    "result_json": "result/ca0088a81195f432671f94828b2e55d89bb9a01c/outputs/fastjson/93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282/com.alibaba.json.bvt.GroovyTest.test_groovy.json",
+    "final_patch": {},
+    "time": "7.01s"
+}
