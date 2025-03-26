@@ -425,10 +425,6 @@ def get_err_method_names(nondex_output,test_file_path,test_full_name):
     
     return method_names
 
-
-
-#===fix
-
 def get_global_vars(code):
     fields = {}
     trees = javalang.parse.parse(code)
@@ -591,58 +587,6 @@ def clean_code(code):
     code_no_comments = remove_comments(code)
     code_no_imports = remove_imports(code_no_comments)
     return code_no_imports
-
-# trees = javalang.parse.parse(code_no_imports)
-# print(trees)
-
-# file = sys.argv[1]
-# read_java(file)
-
-def t(response):
-    # regex = r"public\s+\w+\s+\w+\s*\([^)]*\)\s*(?:throws\s+\w+\s*)?\{(?:.|\n)*?\n\s*\}"
-    # method_pattern = re.compile(regex, re.DOTALL)
-    # matches = method_pattern.findall(code)
-    
-    # for match in matches:
-    #     leftc = match.count("{")
-    #     rightc = match.count("}")
-    #     print(leftc,rightc)
-    #     if leftc == rightc:
-    #         print(match)
-
-    code = response.replace("\n"," \n ")
-    potential_match_final = ""
-    if "//<fix start>" in code:
-        potential_match = code.split("//<fix start>")[1]
-        potential_match_final = potential_match
-        if "//<fix end>" in code:
-            potential_match_final = " \n " + potential_match.split("//<fix end>")[0] + " \n "
-    if potential_match_final != "":
-        import_pattern = re.compile(r'^\s*import\s+([\w.]+);', re.MULTILINE)
-        p_imp_matches = import_pattern.findall(code)
-        for match in p_imp_matches:
-            tmp = "import " + match + ";"
-            if tmp in potential_match_final:
-                pfinal = potential_match_final.replace(tmp,"")
-                potential_match_final = pfinal
-        pleft = potential_match_final.count("{")
-        pright = potential_match_final.count("}")
-        if pleft == pright:
-            if "public class " in potential_match_final:
-                if "public void" in potential_match_final:
-                    tmpstr = potential_match_final.split("public void ")[1]
-                    k = tmpstr.rfind("}")
-                    new_string = tmpstr[:k] + "\n"
-                    final_match = "public void " + new_string
-                    if final_match.count("{") == final_match.count("}"):
-                        potential_match_final = final_match
-                elif "void" in potential_match_final:
-                    tmpstr = potential_match_final.split("void ")[1]
-                    k = tmpstr.rfind("}")
-                    new_string = tmpstr[:k] + "\n"
-                    final_match = "public void " + new_string
-                    if final_match.count("{") == final_match.count("}"):
-                        potential_match_final = final_match
 
 
 def extract_java_code(text):
