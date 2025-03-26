@@ -148,6 +148,7 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
     result_json = os.path.join(result_sub_dir, f'{test_full_name}.json')
     initial_summary, initial_err_msg, initial_err_code, initial_err_method_names = extract_nondex_result(entry, clone_dir)
     if initial_summary == "PASS":
+        print(f'* The original test did not fail, skip!')
         entry.update({'initial_summary': 'Initial run with no failures!', 'result_json': result_json, 'final_patch': {}, 'time': None})
     elif initial_summary == 'FAILURE':
         entry.update({
