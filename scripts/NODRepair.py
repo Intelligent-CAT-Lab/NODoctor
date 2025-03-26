@@ -1,9 +1,11 @@
 import argparse
 import csv
+from datetime import datetime
 import json
 import openai
 import os
 import sys
+import time
 from openai import OpenAI
 from utils import read_csv, get_test_files, \
     locate_test_code, get_realted_helper, get_global_vars, \
@@ -129,26 +131,34 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
     'Status', 'PR Link', 'Notes', None, 'start', 'end', 'method_name', 'method_code', 'node.annotations', 'before', 'after', 'earlist_line', 'helper_method_names', 'repo_name','test_file_path', 'global_vars'])"""
     
     # initial run check with nondex 
-    print(f"* Process single entry...")
+    
     fixed = False
     repo_path = entry['repo_path']
     git_stash(repo_path)
     test_full_name = entry['Fully-Qualified Test Name (packageName.ClassName.methodName)']
     sha = entry['SHA Detected']
     repo_name = entry['repo_name']
+    
+    start = time.time()
+    now = datetime.now()
+    print(f"* Working on test {test_full_name} at {now.strftime('%Y-%m-%d %H:%M:%S')}...")
+
+    
     result_sub_dir = os.path.join(output_dir, repo_name, sha)
     os.makedirs(result_sub_dir, exist_ok=True)
     result_json = os.path.join(result_sub_dir, f'{test_full_name}.json')
     initial_summary, initial_err_msg, initial_err_code, initial_err_method_names = extract_nondex_result(entry, clone_dir)
     if initial_summary == "PASS":
-        entry.update({'initial_summary': 'Initial run with no failures!', 'result_json': result_json, 'final_patch': {}})
+        entry.update({'initial_summary': 'Initial run with no failures!', 'result_json': result_json, 'final_patch': {}, 'time': None})
     elif initial_summary == 'FAILURE':
         entry.update({
             'initial_summary': initial_summary,
             'initial_err_msg': initial_err_msg,
             'initial_err_code': initial_err_code,
             'initial_err_method_names': initial_err_method_names,
-            'result_json': result_json
+            'result_json': result_json,
+            'final_patch': {}, 
+            'time': None
         })
         current_iter = 0
         initial = True
@@ -196,6 +206,11 @@ def repair_single_entry(entry, clone_dir, output_dir, iter_max = 5):
                 
             current_iter += 1
     
+    end = time.time()
+    now = datetime.now()
+    entry['time'] = f'{end - start:.2f}s'
+    print(f"* End on test {test_full_name} at {now.strftime('%Y-%m-%d %H:%M:%S')}...")
+
     
     with open(entry['result_json'], "w", encoding="utf-8") as f:
         json.dump(make_serializable(entry), f, indent=4) 
