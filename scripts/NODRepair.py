@@ -55,10 +55,9 @@ def process_input_csv(input_csv, clone_dir, output_dir):
     for entry in entries:
         single_entry_addinfo = process_single_entry(entry, clone_dir)
         entry.update(single_entry_addinfo)
-        
         repair_single_entry(entry, clone_dir, output_dir)
         
-        exit(0)
+        # exit(0)
 
 def get_model_response(entry, initial = False):
     test_method_code = entry['method_code']

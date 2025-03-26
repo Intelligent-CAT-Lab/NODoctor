@@ -1,38 +1,27 @@
 InputCSV=$1 # all abs path
 CloneDir=$2
-ApiKey=$3
-ResultDIR=$4
-FixScript=$5
+ResultDIR=$3
 
 timeStamp=$(echo -n $(date "+%Y-%m-%d %H:%M:%S") | shasum | cut -f 1 -d " ")
 
+ResultDIR="${ResultDIR%/}"
 mkdir -p ${ResultDIR}/${timeStamp}
-mkdir -p ${ResultDIR}/${timeStamp}/GoodPatches
-
-mainDir=$(pwd)/scripts
-logDir=$(pwd)/${ResultDIR}/${timeStamp}
-patchDir=${logDir}/GoodPatches
-stash=$(pwd)/scripts/cmds/stash_project.sh
-DetailRes=${logDir}/DetailRes.csv
-SummaryRes=${logDir}/SummaryRes.csv
-UnfixedCSV=${logDir}/unfixed.csv
-
+OutputDIR=${ResultDIR}/${timeStamp}/outputs
+mkdir -p ${OutputDIR}
 
 echo "* "STARTING at $(date) 
-echo "* "LOG at ${logDir}
+echo "* "LOG at ${OutputDIR}
 echo "* "REPO VERSION $(git rev-parse HEAD)
 
 exec 3>&1 4>&2
 trap $(exec 2>&4 1>&3) 0 1 2 3
-exec 1>$logDir/$timeStamp.log 2>&1
+exec 1>${OutputDIR}/${timeStamp}.log 2>&1
 
-cd ${mainDir}
-echo "* "CURRENT DIR $(pwd)
+FixScript=scripts/NODRepair.py
+echo "* CURRENT DIR ${pwd}"
 
-echo bash -x ${stash} ${InputCSV} projects
-bash -x ${stash} ${InputCSV} projects
 
-echo python3 ${FixScript} ${InputCSV} ${CloneDir} ${ApiKey} ${DetailRes} ${SummaryRes} ${patchDir} ${UnfixedCSV} |&tee ${logDir}/main.log
-python3 ${FixScript} ${InputCSV} ${CloneDir} ${ApiKey} ${DetailRes} ${SummaryRes} ${patchDir} ${UnfixedCSV} |&tee ${logDir}/main.log
+echo "* Running with ${FixScript} ${InputCSV} ${CloneDir} ${OutputDIR} |&tee ${OutputDIR}/main.log"
+python3 ${FixScript} --input_csv ${InputCSV} --clone_dir ${CloneDir} --output_dir ${OutputDIR} |&tee ${OutputDIR}/main.log
 
 echo "* "ENDING at $(date)
