@@ -21,7 +21,7 @@ You’ll also need to install the following:
 bash -x scripts/clone.sh [InputCSV] [CloneDIR]
 ```
 The arguments are as follows:
-- `InputCSV`: An input csv files which includes the info of `Project URL,SHA Detected,Module Path`, such as:
+- `InputCSV`: An input csv files which includes the info of `Project URL,SHA Detected,Module Path`, an [example](example/input_modeule.csv):
 ```
 https://github.com/apache/nifi,2bd752d868a8f3e36113b078bb576cf054e945e8,nifi-commons/nifi-record
 https://github.com/alibaba/fastjson,93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282,.,
@@ -39,9 +39,9 @@ bash -x scripts/install.sh [InputCSV] [CloneDIR]
 bash -x scripts/repair.sh [InputCSV] [CloneDIR] [ResultDir]
 ```
 The arguments are as follows:
-- `InputCSV`: An input csv files which includes the info of `Project URL,SHA Detected,Module Path,Fully-Qualified Test Name (packageName.ClassName.methodName),Category,Status,PR Link,Notes` for each test (same information as in [IDoFT](https://github.com/TestingResearchIllinois/idoft), such as:
+- `InputCSV`: An input csv files which includes the info of `Project URL,SHA Detected,Module Path,Fully-Qualified Test Name (packageName.ClassName.methodName),Category,Status,PR Link,Notes` for each test (same information as in [IDoFT](https://github.com/TestingResearchIllinois/idoft)), an [example](example/input_test.csv):
 ```
-Project URL,SHA Detected,Module Path,Fully-Qualified Test Name (packageName.ClassName.methodName),Category,Status,PR Link,Notes
+Project URL,SHA Detected,Module Path,Fully-Qualified Test Name(packageName.ClassName.methodName),Category,Status,PR Link,Notes
 https://github.com/apache/nifi,2bd752d868a8f3e36113b078bb576cf054e945e8,nifi-commons/nifi-record,org.apache.nifi.serialization.record.TestDataTypeUtils.testInferTypeWithMapNonStringKeys,ID,,,,
 https://github.com/alibaba/fastjson,93d8c01e907fe35a8ff0eb5fe1c3b279d2f30282,.,com.alibaba.json.bvt.GroovyTest.test_groovy,NOD,RepoArchived,,
 ```
