@@ -29,6 +29,7 @@ def extract_nondex_result(entry, clone_dir):
     return summary, final_err_msg, final_err_code, err_method_names
 
 def git_stash(projectDir):
+    print("restore original code version")
     result = subprocess.run(["bash",stash_project_cmds,projectDir], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output = result.stdout.decode('utf-8')
     print(output)
@@ -172,8 +173,11 @@ def analyze_nondex_result(output):
         return 'FAILURE', err_msg
     elif 'BUILD SUCCESS' in output and 'No Test Failed with this configuration' in output:
         return "PASS", None
+    elif 'BUILD FAILURE' in output and 'COMPILATION ERROR' in output:
+        err_msg = parse_err_msg(output)
+        return 'COMPILATIO_NERROR', err_msg
     else:
-        # print(output)
+        print(output)
         exit(0)
         
 
@@ -189,7 +193,7 @@ def get_err_code_list(output, test_full_name, test_file_path):
     lineno_list = []
     class_file = test_full_name.split(".")[-2] + ".java"
     if "COMPILATION ERROR" in output:
-        err_msg_list, err_code_list = parse_compilation_err(output, test_full_name, test_class_content)
+        err_msg_list, err_code_list = parse_compilation_err(output, test_full_name, test_file_path)
         return err_msg_list, err_code_list
 
     for output_line in output.split("\n"):
@@ -251,6 +255,7 @@ def parse_compilation_err(output, test_full_name, test_file_path):
     test_class_content = read_java(test_file_path)
     class_file = test_full_name.split(".")[-2] + ".java"
     err_code_list = []
+    err_msgs = []
     lineno_list = []
     for output_line in output.split("\n"):
         lineno = None

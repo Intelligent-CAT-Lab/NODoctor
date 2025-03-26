@@ -54,7 +54,6 @@ def process_input_csv(input_csv, clone_dir):
         
         repair_single_entry(entry, clone_dir)
         
-        print(entry.keys())
         exit(0)
 
 def get_model_response(entry, initial = False):
@@ -68,8 +67,9 @@ def get_model_response(entry, initial = False):
         err_code = entry['initial_err_code']
         err_method_names = entry['initial_err_method_names']
     else:
-        print('here')
-        exit(0)
+        err_msg = entry['prev_err_msg']
+        err_code = entry['prev_err_code']
+        err_method_names = entry['prev_err_method_names']
     
     prompt = f"You are a software testing expert. I'm going to ask you to fix a flaky test.\n \
     Flaky tests non-deterministically pass or fail due to concurrency, timeout, platform dependency, timezone dependency, etc.\n \
@@ -120,12 +120,10 @@ def prompt_model(prompt, model_name='gpt-4o-mini'):
         response = f'{e}'
     return response
         
-def repair_single_entry(entry, clone_dir, iter = 5):
-    """entry(['Project URL', 'SHA Detected', 'Module Path', 
-    'Fully-Qualified Test Name (packageName.ClassName.methodName)', 'Category', 
-    'Status', 'PR Link', 'Notes', None, 'start', 'end', 'method_name', 'method_code',
-    'node.annotations', 'before', 'after', 'earlist_line',
-    'helper_method_names', 'repo_name','test_file_path', 'global_vars'])"""
+def repair_single_entry(entry, clone_dir, iter_max = 5):
+    """entry(['Project URL', 'SHA Detected', 'Module Path', 'Fully-Qualified Test Name (packageName.ClassName.methodName)', 'Category', 
+    'Status', 'PR Link', 'Notes', None, 'start', 'end', 'method_name', 'method_code', 'node.annotations', 'before', 'after', 'earlist_line', 'helper_method_names', 'repo_name','test_file_path', 'global_vars'])"""
+    
     # initial run check with nondex 
     print(f"* Process single entry...")
     repo_path = entry['repo_path']
@@ -141,13 +139,30 @@ def repair_single_entry(entry, clone_dir, iter = 5):
             'initial_err_code': initial_err_code,
             'initial_err_method_names': initial_err_method_names
         })
-        print(entry.keys())
-        prompt, response = get_model_response(entry, initial = True)
-        patch = parse_patch(response, entry)
-        updated_class = apply_patch(entry, patch)
-        if updated_class!= None:
-            summary, err_msg, err_code, err_method_names = extract_nondex_result(entry, clone_dir)
-            print(summary, err_msg, err_code, err_method_names)
+        current_iter = 0
+        initial = True
+        # print(entry.keys())
+        while current_iter < iter_max:
+            if current_iter == 0:
+                initial = True  
+            else:
+                initial = False
+            prompt, response = get_model_response(entry, initial)
+            patch = parse_patch(response, entry)
+            updated_class = apply_patch(entry, patch)
+            if updated_class!= None:
+                summary, err_msg, err_code, err_method_names = extract_nondex_result(entry, clone_dir)
+                print('New:', summary, err_msg, err_code, err_method_names)
+                new_res = {
+                    'prev_summary': summary,
+                    'prev_err_msg': err_msg,
+                    'prev_err_code': err_code,
+                    'prev_err_method_names': err_method_names
+                }
+                entry.update(new_res)
+                entry['intermediate_log'] = {}
+                entry['intermediate_log'][current_iter] = new_res
+            current_iter += 1
 
     
     
